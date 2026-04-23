@@ -10,6 +10,7 @@
                 <li><a href="#" onclick="toggleModal('Contact Info', 'Call us at +8801925221970 for immediate assistance.');" class="hvr-grow">Contact</a></li>
                 <?php
                 if (isset($_SESSION['user'])) {
+                    echo '<li><a href="my-appointments.php" class="hvr-grow">My Appointments</a></li>';
                     echo '<li><a href="#" class="hvr-grow">Hi, ' . $_SESSION['user'] . '</a></li>';
                     echo '<li><a href="logout.php" class="hvr-grow">Logout</a></li>';
                 } else {
@@ -28,6 +29,7 @@
         <li><a href="#" onclick="toggleModal('Contact Info', 'Call us at +8801925221970 for immediate assistance.');">Contact</a></li>
         <?php
         if (isset($_SESSION['user'])) {
+            echo '<li><a href="my-appointments.php">My Appointments</a></li>';
             echo '<li><a href="#">Hi, ' . $_SESSION['user'] . '</a></li>';
             echo '<li><a href="logout.php">Logout</a></li>';
         } else {

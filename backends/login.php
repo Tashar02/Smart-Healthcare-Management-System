@@ -43,6 +43,7 @@ if (!preg_match($regex_email, $_POST['email']) || !preg_match($regex_password, $
             session_start();
             $_SESSION['user'] = explode(" ", $tmp_name)[0];
             $_SESSION['user_id'] = $tmp_id;
+            $_SESSION['user_email'] = $email;
             $_SESSION['role'] = $tmp_role;
             $arr = array('code' => "1", 'msg' => "You are Logged In!", 'role' => $tmp_role);
             echo json_encode($arr);
