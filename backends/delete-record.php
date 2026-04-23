@@ -31,6 +31,9 @@ if ($type == 'department') {
 } elseif ($type == 'doctor') {
     $sql = "DELETE FROM doctors WHERE id=?";
     $redirect = '../admin/doctor-list.php';
+} elseif ($type == 'user') {
+    $sql = "DELETE FROM users WHERE id=?";
+    $redirect = '../admin/user-list.php';
 } else {
     $_SESSION['msg'] = 'Invalid type!';
     header('location: ../admin/dashboard.php');

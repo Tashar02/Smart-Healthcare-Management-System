@@ -1,0 +1,31 @@
+:root {
+    --primary: #6b9080;
+    --primary-dark: #4a6a5c;
+    --primary-light: #8ca699;
+    --bg-light: #f4f7f6;
+}
+body { background-color: var(--bg-light); }
+.brand-logo, .nav-wrapper a { color: var(--primary-dark) !important; }
+.btn, .btn-large, .btn-small { background-color: var(--primary) !important; }
+.btn:hover, .btn-large:hover, .btn-small:hover { background-color: var(--primary-dark) !important; }
+.card .card-action a { color: var(--primary) !important; }
+.card .card-action a:hover { color: var(--primary-dark) !important; }
+.sidenav li > a:hover { background-color: rgba(107, 144, 128, 0.1); }
+.modal .modal-footer .btn { background-color: var(--primary) !important; }
+.dropdown-content li > a, .dropdown-content li > span { color: var(--primary); }
+.collection .collection-item.active { background-color: var(--primary); border-color: var(--primary); }
+.progress .indeterminate { background-color: var(--primary); }
+.toast { background-color: var(--primary-dark); }
+.badge.new { background-color: var(--primary); }
+input[type=text]:focus:not([readonly]), input[type=password]:focus:not([readonly]), input[type=email]:focus:not([readonly]), input[type=url]:focus:not([readonly]), input[type=time]:focus:not([readonly]), input[type=date]:focus:not([readonly]), input[type=datetime]:focus:not([readonly]), input[type=datetime-local]:focus:not([readonly]), input[type=tel]:focus:not([readonly]), input[type=number]:focus:not([readonly]), input[type=search]:focus:not([readonly]), textarea.materialize-textarea:focus:not([readonly]) { border-bottom: 1px solid var(--primary); box-shadow: 0 1px 0 0 var(--primary); }
+input[type=text]:focus:not([readonly]) + label, input[type=password]:focus:not([readonly]) + label, input[type=email]:focus:not([readonly]) + label, input[type=url]:focus:not([readonly]) + label, input[type=time]:focus:not([readonly]) + label, input[type=date]:focus:not([readonly]) + label, input[type=datetime]:focus:not([readonly]) + label, input[type=datetime-local]:focus:not([readonly]) + label, input[type=tel]:focus:not([readonly]) + label, input[type=number]:focus:not([readonly]) + label, input[type=search]:focus:not([readonly]) + label, textarea.materialize-textarea:focus:not([readonly]) + label { color: var(--primary); }
+.select-wrapper input.select-dropdown:focus { border-bottom: 1px solid var(--primary); }
+[type="checkbox"].filled-in:checked + span:not(.lever):after { border: 2px solid var(--primary); background-color: var(--primary); }
+.switch label input[type=checkbox]:checked + .lever { background-color: var(--primary-light); }
+.switch label input[type=checkbox]:checked + .lever:after { background-color: var(--primary); }
+.range-field input[type=range]::-webkit-slider-thumb { background-color: var(--primary); }
+.range-field input[type=range]::-moz-range-thumb { background-color: var(--primary); }
+.range-field input[type=range]::-ms-thumb { background-color: var(--primary); }
+.datepicker-table td.is-selected { background-color: var(--primary); }
+.timepicker-digital-display { background-color: var(--primary); }
+.timepicker-close { color: var(--primary); }
