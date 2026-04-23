@@ -1,4 +1,7 @@
 <?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 try {
     if (!file_exists('connection-pdo.php')) {
         throw new Exception();
@@ -6,14 +9,12 @@ try {
         require_once('connection-pdo.php');
     }
 } catch (Exception $e) {
-    $arr = array('code' => "0", 'msg' => "There were some problem in the Server! Try after some time!");
-    echo json_encode($arr);
+    echo json_encode(['code' => "0", 'msg' => "Server connection failed!"]);
     exit();
 }
 
 if (!isset($_POST['email']) || !isset($_POST['password'])) {
-    $arr = array('code' => "0", 'msg' => "Invalid POST variable keys! Refresh the page!");
-    echo json_encode($arr);
+    echo json_encode(['code' => "0", 'msg' => "Invalid inputs!"]);
     exit();
 }
 
@@ -21,41 +22,29 @@ $regex_email = '/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{
 $regex_password = '/^[(A-Z)?(a-z)?(0-9)?!?@?#?-?_?%?]+$/';
 
 if (!preg_match($regex_email, $_POST['email']) || !preg_match($regex_password, $_POST['password'])) {
-    $arr = array('code' => "0", 'msg' => "Whoa! Invalid Inputs!");
-    echo json_encode($arr);
+    echo json_encode(['code' => "0", 'msg' => "Invalid inputs!"]);
     exit();
-} else {
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-    $sql = "SELECT * FROM users WHERE email=?";
-    $query = $pdoconn->prepare($sql);
-    $query->execute([$email]);
-    $arr_login = $query->fetchAll(PDO::FETCH_ASSOC);
+}
 
-    if (count($arr_login) != 0) {
-        foreach ($arr_login as $key) {
-            $tmp_pass = $key['password'];
-            $tmp_name = $key['name'];
-            $tmp_id = $key['id'];
-            $tmp_role = $key['role'];
-        }
-        if ($tmp_pass == $password) {
-            session_start();
-            $_SESSION['user'] = explode(" ", $tmp_name)[0];
-            $_SESSION['user_id'] = $tmp_id;
-            $_SESSION['user_email'] = $email;
-            $_SESSION['role'] = $tmp_role;
-            $arr = array('code' => "1", 'msg' => "You are Logged In!", 'role' => $tmp_role);
-            echo json_encode($arr);
-        } else {
-            $arr = array('code' => "0", 'msg' => "Invalid Password!");
-            echo json_encode($arr);
-            exit();
-        }
+$email = $_POST['email'];
+$password = $_POST['password'];
+$sql = "SELECT * FROM users WHERE email=?";
+$query = $pdoconn->prepare($sql);
+$query->execute([$email]);
+$users = $query->fetchAll(PDO::FETCH_ASSOC);
+
+if (count($users) > 0) {
+    $user = $users[0];
+    if ($user['password'] == $password) {
+        $_SESSION['user'] = explode(" ", $user['name'])[0];
+        $_SESSION['user_id'] = $user['id'];
+        $_SESSION['user_email'] = $email;
+        $_SESSION['role'] = $user['role'];
+        echo json_encode(['code' => "1", 'msg' => "Logged In Successfully!", 'role' => $user['role']]);
     } else {
-        $arr = array('code' => "0", 'msg' => "No such Email ID found!");
-        echo json_encode($arr);
-        exit();
+        echo json_encode(['code' => "0", 'msg' => "Invalid Password!"]);
     }
+} else {
+    echo json_encode(['code' => "0", 'msg' => "No account found with this email!"]);
 }
 ?>

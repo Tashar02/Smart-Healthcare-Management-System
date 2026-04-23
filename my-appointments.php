@@ -5,16 +5,8 @@ if (!isset($_SESSION['user'])) {
     exit();
 }
 require_once('backends/connection-pdo.php');
-$user_email = '';
-if (isset($_SESSION['user_email'])) {
-    $user_email = $_SESSION['user_email'];
-} else {
-    $sql = "SELECT email FROM users WHERE id = ?";
-    $query = $pdoconn->prepare($sql);
-    $query->execute([$_SESSION['user_id']]);
-    $user_data = $query->fetch(PDO::FETCH_ASSOC);
-    $user_email = $user_data['email'] ?? '';
-}
+$user_email = $_SESSION['user_email'];
+
 $sql = "SELECT a.*, d.name as doctor_name, dept.dept_name FROM appointments a JOIN doctors d ON a.doctor_id = d.id JOIN departments dept ON a.dept_id = dept.id WHERE a.patient_email = ? ORDER BY a.id DESC";
 $query = $pdoconn->prepare($sql);
 $query->execute([$user_email]);

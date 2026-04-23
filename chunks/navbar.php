@@ -1,9 +1,9 @@
 <section class="navbar-section">
     <nav class="white" role="navigation">
         <div class="nav-wrapper container">
-            <a id="logo-container" href="/SHMS" class="brand-logo" style="color: #6b9080; font-weight: 600;">HealthCare MS</a>
+            <a id="logo-container" href="index.php" class="brand-logo" style="color: #6b9080; font-weight: 600;">HealthCare MS</a>
             <ul class="right hide-on-med-and-down">
-                <li><a href="/SHMS" class="hvr-grow">Home</a></li>
+                <li><a href="index.php" class="hvr-grow">Home</a></li>
                 <li><a href="departments.php" class="hvr-grow">Departments</a></li>
                 <li><a href="doctors.php" class="hvr-grow">Doctors</a></li>
                 <li><a href="appointments.php" class="hvr-grow">Appointments</a></li>
@@ -22,7 +22,7 @@
         </div>
     </nav>
     <ul class="sidenav" id="mobile-demo">
-        <li><a href="/SHMS">Home</a></li>
+        <li><a href="index.php">Home</a></li>
         <li><a href="departments.php">Departments</a></li>
         <li><a href="doctors.php">Doctors</a></li>
         <li><a href="appointments.php">Appointments</a></li>

@@ -25,45 +25,54 @@ $(function(){
 
         if ((name == "") || (email == "") || (password == "") || (con_password == "") || (role == "")) {
             $('#reg_error').text("Don't leave the fields blank!");
+            return;
         }
         else if (!mail_regex.test(email)) {
             $('#reg_error').text('Enter a valid Email!');
+            return;
         }
         else if (!name_regex.test(name)) {
             $('#reg_error').text('Enter a Proper Name!');
+            return;
         }
         else if (password != con_password) {
             $('#reg_error').text("Passwords doesn't match!");
-        } else {
-            $.ajax({
-                url: 'backends/register.php',
-                type: 'POST',
-                 {
-                    'name': name,
-                    'email': email,
-                    'password': password,
-                    'role': role
-                },
-                dataType: 'json',
-                beforeSend: function(){
-                    $('#submit_reg').prop("disabled", true);
-                },
-                success: function(data){
-                    $('#name_reg').val("");
-                    $('#email_reg').val("");
-                    $('#password_reg').val("");
-                    $('#con_password_reg').val("");
-                    var instance2 = M.Modal.getInstance($('#modal2'));
-                    instance2.close();
-                    if (data['code'] == "0") {
-                        toggleModal('Error!', data['msg']);
-                    } else if (data['code'] == "1") {
-                        toggleModal('Success!', data['msg']);
-                    }
-                    $('#submit_reg').prop("disabled", false);
-                }
-            });
+            return;
         }
+
+        $.ajax({
+            url: 'backends/register.php',
+            type: 'POST',
+             {
+                'name': name,
+                'email': email,
+                'password': password,
+                'role': role
+            },
+            dataType: 'json',
+            beforeSend: function(){
+                $('#submit_reg').prop("disabled", true);
+                $('#reg_error').text("");
+            },
+            success: function(data){
+                $('#name_reg').val("");
+                $('#email_reg').val("");
+                $('#password_reg').val("");
+                $('#con_password_reg').val("");
+                var instance2 = M.Modal.getInstance($('#modal2'));
+                instance2.close();
+                if (data.code == "0") {
+                    toggleModal('Registration Failed', data.msg);
+                } else {
+                    toggleModal('Success', data.msg);
+                }
+                $('#submit_reg').prop("disabled", false);
+            },
+            error: function(){
+                $('#reg_error').text("Server error! Please try again.");
+                $('#submit_reg').prop("disabled", false);
+            }
+        });
     });
 
     $('#login_btn').click(function(){
@@ -73,32 +82,39 @@ $(function(){
 
         if ((email == "") || (password == "")) {
             $('#login_error').text("Don't leave the fields blank!");
+            return;
         }
         else if (!mail_regex.test(email)) {
             $('#login_error').text('Enter a valid Email!');
-        } else {
-            $.ajax({
-                url: 'backends/login.php',
-                type: 'POST',
-                 {
-                    'email': email,
-                    'password': password
-                },
-                dataType: 'json',
-                beforeSend: function(){
-                    $('#login_btn').prop("disabled", true);
-                },
-                success: function(data){
-                    var instance1 = M.Modal.getInstance($('#modal1'));
-                    instance1.close();
-                    if (data['code'] == "0") {
-                        toggleModal('Error!', data['msg']);
-                    } else if (data['code'] == "1") {
-                        location.reload(true);
-                    }
-                    $('#login_btn').prop("disabled", false);
-                }
-            });
+            return;
         }
+
+        $.ajax({
+            url: 'backends/login.php',
+            type: 'POST',
+             {
+                'email': email,
+                'password': password
+            },
+            dataType: 'json',
+            beforeSend: function(){
+                $('#login_btn').prop("disabled", true);
+                $('#login_error').text("");
+            },
+            success: function(data){
+                var instance1 = M.Modal.getInstance($('#modal1'));
+                instance1.close();
+                if (data.code == "0") {
+                    toggleModal('Login Failed', data.msg);
+                } else {
+                    location.reload(true);
+                }
+                $('#login_btn').prop("disabled", false);
+            },
+            error: function(){
+                $('#login_error').text("Server error! Please try again.");
+                $('#login_btn').prop("disabled", false);
+            }
+        });
     });
 });
