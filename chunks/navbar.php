@@ -1,50 +1,39 @@
-<section class="fnavbar">
-		<div class="navbar-fixed">
-		<nav>
-		    <div class="nav-wrapper">
-		      <a href="#" class="brand-logo">Online Food Store</a>
-		      <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-		      <ul class="right hide-on-med-and-down">
-		        <li><a href="/Restaurent" class="hvr-grow">Home</a></li>
-		        <li><a href="/Restaurent/about-restro.php" class="hvr-grow">About Us</a></li>
-		        <li><a href="food-categories.php" class="hvr-grow">Categories</a></li>
-		        <li><a href="foods.php" class="hvr-grow">Foods</a></li>
-		        <li><a href="#" class="hvr-grow" onclick="toggleModal('Contact Info', 'You can contact us directly by calling to this number +8801925221970. Check the bottom Footer Section of the website for more info.');">Contact</a></li>
-		        
-		        <?php
-
-		        	if (isset($_SESSION['user'])) {
-		        		echo '<li><a href="#" class="hvr-grow">Hi, '.$_SESSION['user'].'</a></li>
-		        		<li><a href="logout.php" class="hvr-grow">Logout</a></li>';
-		        	} else {
-		        		echo '<li><a href="#" class="hvr-grow modal-trigger" data-target="modal1">Login</a></li>
-		        		<li><a href="#" class="hvr-grow modal-trigger" data-target="modal2">Register</a></li>';
-		        	}
-
-		        ?>
-		        
-		      </ul>
-		    </div>
-		  </nav>
-		</div>
-
-		  <ul class="sidenav" id="mobile-demo">
-		    <li><a href="/Restaurent">Home</a></li>
-	        <li><a href="/Restaurent/about-restro-girls.php">About Us</a></li>
-	        <li><a href="food-categories.php">Categories</a></li>
-	        <li><a href="foods.php">Foods</a></li>
-	        <li><a href="#" onclick="toggleModal('Contact Info', 'You can contact us directly by calling to this number +8801925221970. Check the bottom Footer Section of the website for more info.');">Contact</a></li>
-
-	        <?php
-
-		        	if (isset($_SESSION['user'])) {
-		        		echo '<li><a href="#">Hi, '.$_SESSION['user'].'</a></li>
-		        		<li><a href="logout.php">Logout</a></li>';
-		        	} else {
-		        		echo '<li><a href="#" class="modal-trigger" data-target="modal1">Login</a></li>
-		        		<li><a href="#" class="modal-trigger" data-target="modal2">Register</a></li>';
-		        	}
-
-		        ?>
-		  </ul>
-	</section>
+<section class="navbar-section">
+    <nav class="white" role="navigation">
+        <div class="nav-wrapper container">
+            <a id="logo-container" href="/SHMS" class="brand-logo" style="color: #6b9080; font-weight: 600;">HealthCare MS</a>
+            <ul class="right hide-on-med-and-down">
+                <li><a href="/SHMS" class="hvr-grow">Home</a></li>
+                <li><a href="departments.php" class="hvr-grow">Departments</a></li>
+                <li><a href="doctors.php" class="hvr-grow">Doctors</a></li>
+                <li><a href="appointments.php" class="hvr-grow">Appointments</a></li>
+                <li><a href="#" onclick="toggleModal('Contact Info', 'Call us at +8801925221970 for immediate assistance.');" class="hvr-grow">Contact</a></li>
+                <?php
+                if (isset($_SESSION['user'])) {
+                    echo '<li><a href="#" class="hvr-grow">Hi, ' . $_SESSION['user'] . '</a></li>';
+                    echo '<li><a href="logout.php" class="hvr-grow">Logout</a></li>';
+                } else {
+                    echo '<li><a href="#" class="hvr-grow modal-trigger" data-target="modal1">Login</a></li>';
+                    echo '<li><a href="#" class="hvr-grow modal-trigger" data-target="modal2">Register</a></li>';
+                }
+                ?>
+            </ul>
+        </div>
+    </nav>
+    <ul class="sidenav" id="mobile-demo">
+        <li><a href="/SHMS">Home</a></li>
+        <li><a href="departments.php">Departments</a></li>
+        <li><a href="doctors.php">Doctors</a></li>
+        <li><a href="appointments.php">Appointments</a></li>
+        <li><a href="#" onclick="toggleModal('Contact Info', 'Call us at +8801925221970 for immediate assistance.');">Contact</a></li>
+        <?php
+        if (isset($_SESSION['user'])) {
+            echo '<li><a href="#">Hi, ' . $_SESSION['user'] . '</a></li>';
+            echo '<li><a href="logout.php">Logout</a></li>';
+        } else {
+            echo '<li><a href="#" class="modal-trigger" data-target="modal1">Login</a></li>';
+            echo '<li><a href="#" class="modal-trigger" data-target="modal2">Register</a></li>';
+        }
+        ?>
+    </ul>
+</section>
