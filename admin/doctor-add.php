@@ -55,12 +55,13 @@ $departments = $query->fetchAll(PDO::FETCH_ASSOC);
                         <div class="row">
                             <div class="file-field input-field col s12">
                                 <div class="btn" style="background: #6b9080 !important;">
-                                    <span>Image</span>
-                                    <input type="file" name="image" required>
+                                    <span>Upload Photo (Optional)</span>
+                                    <input type="file" name="image" accept="image/*">
                                 </div>
                                 <div class="file-path-wrapper">
-                                    <input class="file-path validate" type="text" placeholder="Upload doctor photo">
+                                    <input class="file-path validate" type="text" placeholder="Select doctor photo">
                                 </div>
+                                <p style="color: #666; font-size: 0.85rem; margin-top: 5px;">Leave empty to use default placeholder.</p>
                             </div>
                         </div>
                         <div class="center">

@@ -23,7 +23,7 @@ $(function(){
         var mail_regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z]{2,4})+$/;
         var name_regex = /^[(A-Z)?(a-z)?(0-9)?\s*]+$/;
 
-        if ((name == "") || (email == "") || (password == "") || (con_password == "") || (role == null)) {
+        if ((name == "") || (email == "") || (password == "") || (con_password == "") || (role == "")) {
             $('#reg_error').text("Don't leave the fields blank!");
         }
         else if (!mail_regex.test(email)) {
@@ -38,7 +38,7 @@ $(function(){
             $.ajax({
                 url: 'backends/register.php',
                 type: 'POST',
-                data: {
+                 {
                     'name': name,
                     'email': email,
                     'password': password,
@@ -80,7 +80,7 @@ $(function(){
             $.ajax({
                 url: 'backends/login.php',
                 type: 'POST',
-                data: {
+                 {
                     'email': email,
                     'password': password
                 },

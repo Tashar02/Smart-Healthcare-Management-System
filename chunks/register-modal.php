@@ -26,8 +26,7 @@
             <div class="row">
                 <div class="input-field col s12">
                     <select id="role_reg">
-                        <option value="" disabled selected>Choose Account Type</option>
-                        <option value="patient">Patient</option>
+                        <option value="patient" selected>Patient</option>
                         <option value="doctor">Doctor</option>
                         <option value="receptionist">Receptionist</option>
                     </select>

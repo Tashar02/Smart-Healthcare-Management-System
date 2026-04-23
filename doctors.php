@@ -24,6 +24,7 @@ $doctors = $query->fetchAll(PDO::FETCH_ASSOC);
     <link href="https://fonts.googleapis.com/css?family=Bree+Serif&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/healthcare-theme.css">
 </head>
 <body>
     <?php require('chunks/login-modal.php'); ?>
@@ -43,7 +44,13 @@ $doctors = $query->fetchAll(PDO::FETCH_ASSOC);
                     <div class="col s12 m6 l4">
                         <div class="card hoverable">
                             <div class="card-image">
-                                <img src="images/<?php echo htmlspecialchars($doc['image']); ?>" alt="<?php echo htmlspecialchars($doc['name']); ?>" style="height: 200px; object-fit: cover;">
+                                <?php 
+                                $img_src = htmlspecialchars($doc['image']);
+                                if (empty($img_src) || !file_exists("images/" . $img_src)) {
+                                    $img_src = "images/default-doctor.jpg";
+                                }
+                                ?>
+                                <img src="<?php echo $img_src; ?>" alt="<?php echo htmlspecialchars($doc['name']); ?>" style="height: 200px; object-fit: cover;">
                                 <span class="card-title" style="background: rgba(0,0,0,0.5); padding: 10px;"><?php echo htmlspecialchars($doc['name']); ?></span>
                             </div>
                             <div class="card-content">

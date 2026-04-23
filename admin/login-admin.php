@@ -1,5 +1,7 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 include_once("../backends/connection-pdo.php");
 
 if (!isset($_POST['email']) || !isset($_POST['password'])) {

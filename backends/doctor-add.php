@@ -16,7 +16,7 @@ try {
     exit();
 }
 
-if (!isset($_POST['name']) || !isset($_POST['dept_id']) || !isset($_POST['specialization']) || !isset($_POST['fee']) || !isset($_FILES['image'])) {
+if (!isset($_POST['name']) || !isset($_POST['dept_id']) || !isset($_POST['specialization']) || !isset($_POST['fee'])) {
     $_SESSION['msg'] = 'Invalid form submission!';
     header('location: ../admin/doctor-add.php');
     exit();
@@ -26,12 +26,18 @@ $name = $_POST['name'];
 $dept_id = intval($_POST['dept_id']);
 $specialization = $_POST['specialization'];
 $fee = intval($_POST['fee']);
-$image = $_FILES['image']['name'];
-$tmp_image = $_FILES['image']['tmp_name'];
 
-$target_dir = "../images/";
-$target_file = $target_dir . basename($image);
-move_uploaded_file($tmp_image, $target_file);
+$image = 'default-doctor.jpg';
+if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+    $image = basename($_FILES['image']['name']);
+    $target_dir = "../images/";
+    $target_file = $target_dir . $image;
+    if (move_uploaded_file($_FILES['image']['tmp_name'], $target_file)) {
+        $image = $image;
+    } else {
+        $image = 'default-doctor.jpg';
+    }
+}
 
 $sql = "INSERT INTO doctors(dept_id, name, image, specialization, fee) VALUES(?,?,?,?,?)";
 $query = $pdoconn->prepare($sql);
