@@ -1,14 +1,14 @@
-.sidenav a{
-	text-decoration: none;
+.sidenav a {
+    text-decoration: none;
 }
 
 .nav-wrapper > a {
-	text-decoration: none;
-	font-family: 'Pacifico', cursive;
+    text-decoration: none;
+    font-family: 'Pacifico', cursive;
 }
 
 .nav-wrapper > a:hover {
-	color: white;
+    color: white;
 }
 
 .hvr-grow {
@@ -18,26 +18,22 @@
 .hvr-grow:hover,
 .hvr-grow:focus,
 .hvr-grow:active {
-	text-decoration: none;
-	color: white;
+    text-decoration: none;
+    color: white;
 }
 
-.slider .indicators .indicator-item.active{
-	background-color: #ee6e73 !important;
+.slider .indicators .indicator-item.active {
+    background-color: #6b9080 !important;
 }
 
 @media(max-width : 992px) {
-
-	.nav-wrapper > a:hover {
-		color: black;
-	}
-	
+    .nav-wrapper > a:hover {
+        color: black;
+    }
 }
 
 @media(min-width : 992px) {
-
-	.nav-wrapper > a {
-		padding-left: 35px;
-	}
-	
+    .nav-wrapper > a {
+        padding-left: 35px;
+    }
 }
