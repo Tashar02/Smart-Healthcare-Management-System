@@ -6,7 +6,7 @@
                 <div class="row">
                     <div class="col s12">
                         <div class="card-panel teal" style="background: #6b9080 !important;">
-                            <span class="white-text">"The appointment system is incredibly smooth. I booked a consultation in minutes and the doctor was highly professional. Truly modern healthcare!"<br>-<br> <strong>Sarah Jenkins</strong>
+                            <span class="white-text">"The appointment system is incredibly smooth. I booked a consultation in minutes and the doctor was highly professional. Truly modern healthcare!"<br>-<br> <strong>Md. Ariful Islam</strong>
                             </span>
                         </div>
                     </div>
@@ -16,7 +16,7 @@
                 <div class="row">
                     <div class="col s12">
                         <div class="card-panel teal" style="background: #6b9080 !important;">
-                            <span class="white-text">"Managing my family's medical records and prescriptions has never been easier. The staff is responsive and the platform is very intuitive."<br>-<br> <strong>Michael Chen</strong>
+                            <span class="white-text">"Managing my family's medical records and prescriptions has never been easier. The staff is responsive and the platform is very intuitive."<br>-<br> <strong>Fatema Begum</strong>
                             </span>
                         </div>
                     </div>
@@ -26,7 +26,7 @@
                 <div class="row">
                     <div class="col s12">
                         <div class="card-panel teal" style="background: #6b9080 !important;">
-                            <span class="white-text">"As a doctor, this system saves me hours every week. Patient history, scheduling, and prescriptions are all in one secure place. Highly recommended."<br>-<br> <strong>Dr. Emily Ross</strong>
+                            <span class="white-text">"As a doctor, this system saves me hours every week. Patient history, scheduling, and prescriptions are all in one secure place. Highly recommended."<br>-<br> <strong>Dr. Nusrat Jahan</strong>
                             </span>
                         </div>
                     </div>
@@ -36,7 +36,7 @@
                 <div class="row">
                     <div class="col s12">
                         <div class="card-panel teal" style="background: #6b9080 !important;">
-                            <span class="white-text">"The reception team and online booking work perfectly together. No more long waiting room queues. Everything is organized and timely."<br>-<br> <strong>David Miller</strong>
+                            <span class="white-text">"The reception team and online booking work perfectly together. No more long waiting room queues. Everything is organized and timely."<br>-<br> <strong>Kamal Hossain</strong>
                             </span>
                         </div>
                     </div>
@@ -46,7 +46,7 @@
                 <div class="row">
                     <div class="col s12">
                         <div class="card-panel teal" style="background: #6b9080 !important;">
-                            <span class="white-text">"Clean interface, secure data, and excellent doctor profiles. I finally feel in control of my healthcare journey. Thank you HealthCare MS!"<br>-<br> <strong>Priya Sharma</strong>
+                            <span class="white-text">"Clean interface, secure data, and excellent doctor profiles. I finally feel in control of my healthcare journey. Thank you HealthCare MS!"<br>-<br> <strong>Rashid Khan</strong>
                             </span>
                         </div>
                     </div>
