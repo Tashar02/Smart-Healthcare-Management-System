@@ -49,7 +49,7 @@ $departments = $query->fetchAll(PDO::FETCH_ASSOC);
                         <div class="row">
                             <div class="input-field col s12">
                                 <input type="number" id="fee" name="fee" class="validate" required>
-                                <label for="fee">Consultation Fee</label>
+                                <label for="fee">Consultation Fee (BDT)</label>
                             </div>
                         </div>
                         <div class="row">

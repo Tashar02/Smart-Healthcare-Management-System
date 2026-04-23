@@ -50,7 +50,7 @@ if (isset($_SESSION['msg'])) {
                                         <td><?php echo htmlspecialchars($doc['name']); ?></td>
                                         <td><?php echo htmlspecialchars($doc['dept_name']); ?></td>
                                         <td><?php echo htmlspecialchars($doc['specialization']); ?></td>
-                                        <td>$<?php echo htmlspecialchars($doc['fee']); ?></td>
+                                        <td>৳<?php echo number_format($doc['fee']); ?> BDT</td>
                                         <td>
                                             <a href="../backends/delete-record.php?type=doctor&id=<?php echo $doc['id']; ?>" class="btn-small red darken-1">Delete</a>
                                         </td>
