@@ -6,10 +6,15 @@ if (!isset($_SESSION['admin'])) {
 }
 ?>
 <?php require('layout/header.php'); ?>
-<?php require('layout/left-sidebar-long.php'); ?>
 <?php require('layout/topnav.php'); ?>
 <?php require('layout/left-sidebar-short.php'); ?>
-<div class="section white-text center" style="background: #4a6a5c; margin-top: 20px;">
+<?php
+if (isset($_SESSION['msg'])) {
+    echo '<div class="container" style="margin-top: 20px;"><div class="admin-alert">'.$_SESSION['msg'].'</div></div>';
+    unset($_SESSION['msg']);
+}
+?>
+<div class="section admin-theme-bg center" style="margin-top: 20px;">
     <h4>Add Department</h4>
 </div>
 <div class="container" style="margin-top: 30px; margin-bottom: 50px;">

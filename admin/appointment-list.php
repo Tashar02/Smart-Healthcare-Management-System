@@ -5,23 +5,26 @@ if (!isset($_SESSION['admin'])) {
     exit();
 }
 require_once('../backends/connection-pdo.php');
-$sql = "SELECT a.*, d.name as doctor_name, dept.dept_name FROM appointments a JOIN doctors d ON a.doctor_id = d.id JOIN departments dept ON a.dept_id = dept.id ORDER BY a.id DESC";
+$sql = "SELECT a.*, d.name as doctor_name, dept.dept_name 
+        FROM appointments a 
+        JOIN doctors d ON a.doctor_id = d.id 
+        JOIN departments dept ON a.dept_id = dept.id 
+        ORDER BY FIELD(a.status, 'pending', 'confirmed', 'cancelled', 'completed'), a.appointment_date ASC, a.appointment_time ASC";
 $query = $pdoconn->prepare($sql);
 $query->execute();
 $appointments = $query->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <?php require('layout/header.php'); ?>
-<?php require('layout/left-sidebar-long.php'); ?>
 <?php require('layout/topnav.php'); ?>
 <?php require('layout/left-sidebar-short.php'); ?>
 <?php
 if (isset($_SESSION['msg'])) {
-    echo '<div class="section white-text admin-theme-bg" style="padding: 15px; font-weight: 600;">'.$_SESSION['msg'].'</div>';
+    echo '<div class="container" style="margin-top: 20px;"><div class="admin-alert">'.$_SESSION['msg'].'</div></div>';
     unset($_SESSION['msg']);
 }
 ?>
-<div class="section white-text center admin-theme-bg" style="margin-top: 20px; padding: 20px 0; border-radius: 8px;">
-    <h4 style="margin: 0; font-weight: 700;">Appointments</h4>
+<div class="section admin-theme-bg center" style="margin-top: 20px;">
+    <h4>Appointments</h4>
 </div>
 <div class="container" style="margin-top: 30px; margin-bottom: 50px;">
     <div class="row">
@@ -37,7 +40,7 @@ if (isset($_SESSION['msg'])) {
                                 <th>Date</th>
                                 <th>Time</th>
                                 <th>Status</th>
-                                <th>Actions</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -52,16 +55,16 @@ if (isset($_SESSION['msg'])) {
                                         <td>
                                             <?php
                                             $status_color = 'grey';
-                                            if ($app['status'] == 'confirmed') $status_color = 'green';
-                                            if ($app['status'] == 'completed') $status_color = 'blue';
+                                            if ($app['status'] == 'confirmed') $status_color = 'orange';
+                                            if ($app['status'] == 'completed') $status_color = 'green';
                                             if ($app['status'] == 'cancelled') $status_color = 'red';
                                             ?>
-                                            <span class="new badge <?php echo $status_color; ?>" data-badge-caption=""><?php echo ucfirst($app['status']); ?></span>
+                                            <span class="new badge <?php echo $status_color; ?> darken-2" data-badge-caption=""><?php echo ucfirst($app['status']); ?></span>
                                         </td>
                                         <td>
                                             <form action="../backends/update-appointment.php" method="POST" style="display: inline;">
                                                 <input type="hidden" name="id" value="<?php echo $app['id']; ?>">
-                                                <select name="status" onchange="this.form.submit()" style="display: inline-block; width: auto; height: 30px;">
+                                                <select name="status" class="browser-default" onchange="this.form.submit()" style="width: 130px; border-radius: 5px; border: 1px solid #ddd; height: 35px; padding: 0 5px;">
                                                     <option value="pending" <?php echo ($app['status'] == 'pending') ? 'selected' : ''; ?>>Pending</option>
                                                     <option value="confirmed" <?php echo ($app['status'] == 'confirmed') ? 'selected' : ''; ?>>Confirmed</option>
                                                     <option value="completed" <?php echo ($app['status'] == 'completed') ? 'selected' : ''; ?>>Completed</option>

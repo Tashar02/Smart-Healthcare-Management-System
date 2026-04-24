@@ -23,37 +23,40 @@ if(isset($_SESSION['msg']))
 </head>
     <style>
         :root {
-            --admin-primary: #e65100;
-            --admin-primary-light: #fb8c00;
+            --admin-primary: #ef6c00;
+            --admin-primary-light: #ff9800;
         }
         body {
-            background-color: #fff3e0;
+            background-color: #fffbf2;
             display: flex;
             min-height: 100vh;
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            font-family: 'Bree Serif', serif;
         }
         .login-card {
             width: 100%;
-            max-width: 450px;
+            max-width: 400px;
             padding: 40px 30px;
-            border-radius: 12px;
-            box-shadow: 0 8px 30px rgba(230, 81, 0, 0.2);
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(239, 108, 0, 0.1);
         }
         .login-card .card-title {
             color: var(--admin-primary);
             font-weight: 700;
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
         }
         .admin-btn {
-            background: linear-gradient(135deg, var(--admin-primary), var(--admin-primary-light)) !important;
+            background: var(--admin-primary) !important;
             width: 100%;
-            border-radius: 25px;
-            height: 45px;
+            border-radius: 8px;
+            height: 50px;
             font-weight: 600;
             letter-spacing: 1px;
+            text-transform: none;
+            font-size: 1.1rem;
         }
         .input-field input:focus {
             border-bottom: 1px solid var(--admin-primary) !important;
@@ -65,18 +68,18 @@ if(isset($_SESSION['msg']))
         .error-msg {
             color: #d32f2f;
             background: #ffebee;
-            padding: 10px;
-            border-radius: 5px;
+            padding: 12px;
+            border-radius: 8px;
             text-align: center;
-            font-weight: 500;
-            margin-bottom: 20px;
+            font-weight: 600;
+            margin-bottom: 25px;
         }
     </style>
 </head>
 <body>
 
     <div class="card login-card white">
-        <h4 class="card-title">HealthCare MS <br><span style="font-size: 1.5rem; opacity: 0.8; color: #fb8c00;">Admin Portal</span></h4>
+        <h4 class="card-title">HealthCare MS <br><span style="font-size: 1.2rem; opacity: 0.7; color: var(--admin-primary-light);">Admin Portal</span></h4>
         
         <form action="login-admin.php" method="post">
             <?php
@@ -85,9 +88,8 @@ if(isset($_SESSION['msg']))
                 }
             ?>
 
-            <div class="row" style="margin-bottom: 10px;">
+            <div class="row">
                 <div class="input-field col s12">
-                    <i class="material-icons prefix" style="color: #fb8c00;">email</i>
                     <input name="email" id="email" type="email" class="validate" required>
                     <label for="email">Admin Email</label>
                 </div>
@@ -95,7 +97,6 @@ if(isset($_SESSION['msg']))
 
             <div class="row" style="margin-bottom: 30px;">
                 <div class="input-field col s12">
-                    <i class="material-icons prefix" style="color: #fb8c00;">lock</i>
                     <input id="password" name="password" type="password" class="validate" required>
                     <label for="password">Password</label>
                 </div>

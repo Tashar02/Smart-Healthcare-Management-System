@@ -5,23 +5,22 @@ if (!isset($_SESSION['admin'])) {
     exit();
 }
 require_once('../backends/connection-pdo.php');
-$sql = "SELECT d.*, dept.dept_name FROM doctors d JOIN departments dept ON d.dept_id = dept.id ORDER BY d.id DESC";
+$sql = "SELECT d.*, dept.dept_name FROM doctors d JOIN departments dept ON d.dept_id = dept.id ORDER BY d.id ASC";
 $query = $pdoconn->prepare($sql);
 $query->execute();
 $doctors = $query->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <?php require('layout/header.php'); ?>
-<?php require('layout/left-sidebar-long.php'); ?>
 <?php require('layout/topnav.php'); ?>
 <?php require('layout/left-sidebar-short.php'); ?>
 <?php
 if (isset($_SESSION['msg'])) {
-    echo '<div class="section white-text admin-theme-bg" style="padding: 15px; font-weight: 600;">'.$_SESSION['msg'].'</div>';
+    echo '<div class="container" style="margin-top: 20px;"><div class="admin-alert">'.$_SESSION['msg'].'</div></div>';
     unset($_SESSION['msg']);
 }
 ?>
-<div class="section white-text center admin-theme-bg" style="margin-top: 20px; padding: 20px 0; border-radius: 8px;">
-    <h4 style="margin: 0; font-weight: 700;">Doctors</h4>
+<div class="section admin-theme-bg center" style="margin-top: 20px;">
+    <h4>Doctors</h4>
 </div>
 <div class="container" style="margin-top: 30px; margin-bottom: 50px;">
     <div class="row">
