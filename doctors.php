@@ -61,9 +61,11 @@ $doctors = $query->fetchAll(PDO::FETCH_ASSOC);
                                 <p style="color: #333; font-weight: 600; margin-top: 10px;">Fee: ৳<?php echo number_format($doc['fee']); ?> BDT</p>
                                 <p style="color: #666; font-size: 0.85rem; margin-top: 5px;">Available: <?php echo $doc['available_start']; ?> - <?php echo $doc['available_end']; ?></p>
                             </div>
-                            <div class="card-action">
-                                <a href="appointments.php?doctor_id=<?php echo $doc['id']; ?>" class="waves-effect waves-light btn" style="background: #6b9080 !important; color: white !important; width: 100%;">Book Appointment</a>
-                            </div>
+                            <?php if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'doctor'): ?>
+                                <div class="card-action">
+                                    <a href="appointments.php?doctor_id=<?php echo $doc['id']; ?>" class="waves-effect waves-light btn" style="background: #6b9080 !important; color: white !important; width: 100%;">Book Appointment</a>
+                                </div>
+                            <?php endif; ?>
                         </div>
                     </div>
                 <?php endforeach; ?>
