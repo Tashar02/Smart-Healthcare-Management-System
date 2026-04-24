@@ -16,22 +16,22 @@ $doctors = $query->fetchAll(PDO::FETCH_ASSOC);
 <?php require('layout/left-sidebar-short.php'); ?>
 <?php
 if (isset($_SESSION['msg'])) {
-    echo '<div class="section white-text" style="background: #4a6a5c;">'.$_SESSION['msg'].'</div>';
+    echo '<div class="section white-text admin-theme-bg" style="padding: 15px; font-weight: 600;">'.$_SESSION['msg'].'</div>';
     unset($_SESSION['msg']);
 }
 ?>
-<div class="section white-text center" style="background: #4a6a5c; margin-top: 20px;">
-    <h4>Doctors</h4>
+<div class="section white-text center admin-theme-bg" style="margin-top: 20px; padding: 20px 0; border-radius: 8px;">
+    <h4 style="margin: 0; font-weight: 700;">Doctors</h4>
 </div>
 <div class="container" style="margin-top: 30px; margin-bottom: 50px;">
     <div class="row">
         <div class="col s12">
             <div class="section right" style="margin-bottom: 15px;">
-                <a href="doctor-add.php" class="waves-effect waves-light btn" style="background: #6b9080 !important;">Add Doctor</a>
+                <a href="doctor-add.php" class="waves-effect waves-light btn admin-btn"><i class="material-icons left">person_add</i>Add Doctor</a>
             </div>
             <div class="card">
                 <div class="card-content">
-                    <table class="highlight responsive-table">
+                    <table class="striped highlight responsive-table">
                         <thead>
                             <tr>
                                 <th>ID</th>
