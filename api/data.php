@@ -12,7 +12,7 @@ try {
 
 if (isset($_POST['action']) && $_POST['action'] == 'get_doctors' && isset($_POST['dept_id'])) {
     $dept_id = intval($_POST['dept_id']);
-    $sql = "SELECT id, name FROM doctors WHERE dept_id = ?";
+    $sql = "SELECT id, name, fee, available_start, available_end FROM doctors WHERE dept_id = ?";
     $query = $pdoconn->prepare($sql);
     $query->execute([$dept_id]);
     $doctors = $query->fetchAll(PDO::FETCH_ASSOC);

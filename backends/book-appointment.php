@@ -36,23 +36,48 @@ $query_doc = $pdoconn->prepare($sql_doc);
 $query_doc->execute([$doctor_id]);
 $doc_avail = $query_doc->fetch(PDO::FETCH_ASSOC);
 
-if (!$doc_avail || $appointment_time < $doc_avail['available_start'] || $appointment_time > $doc_avail['available_end']) {
-    echo json_encode(['code' => "0", 'msg' => "Selected time is outside doctor's availability!"]);
+if (!$doc_avail) {
+    echo json_encode(['code' => "0", 'msg' => "Doctor not found!"]);
     exit();
 }
 
-$sql_dup = "SELECT COUNT(*) FROM appointments WHERE patient_email=? AND doctor_id=? AND appointment_date=? AND appointment_time=?";
-$query_dup = $pdoconn->prepare($sql_dup);
-$query_dup->execute([$patient_email, $doctor_id, $appointment_date, $appointment_time]);
-if ($query_dup->fetchColumn() > 0) {
-    echo json_encode(['code' => "0", 'msg' => "You already have an appointment with this doctor at this time!"]);
-    exit();
+$current_date = $appointment_date;
+$current_time = $appointment_time;
+
+while (true) {
+    // Check if time is within availability
+    if ($current_time < $doc_avail['available_start'] || $current_time >= $doc_avail['available_end']) {
+        // Move to next day
+        $current_date = date('Y-m-d', strtotime($current_date . ' +1 day'));
+        $current_time = $doc_avail['available_start'];
+        continue;
+    }
+
+    // Check if slot is taken
+    $sql_check = "SELECT COUNT(*) FROM appointments WHERE doctor_id=? AND appointment_date=? AND appointment_time=? AND status != 'cancelled'";
+    $query_check = $pdoconn->prepare($sql_check);
+    $query_check->execute([$doctor_id, $current_date, $current_time]);
+    
+    if ($query_check->fetchColumn() == 0) {
+        // Slot is free!
+        break;
+    }
+    
+    // Slot taken, try next 20 mins
+    $timestamp = strtotime($current_time);
+    $timestamp += 20 * 60;
+    $current_time = date("H:i", $timestamp);
+}
+
+$final_msg = "Appointment booked successfully!";
+if ($current_date != $appointment_date || $current_time != $appointment_time) {
+    $final_msg = "The requested time was filled. We have scheduled you for the nearest available time: " . $current_date . " at " . $current_time;
 }
 
 $sql = "INSERT INTO appointments(patient_name, patient_email, doctor_id, dept_id, appointment_date, appointment_time, notes, status) VALUES(?,?,?,?,?,?,?, 'pending')";
 $query = $pdoconn->prepare($sql);
-if ($query->execute([$patient_name, $patient_email, $doctor_id, $dept_id, $appointment_date, $appointment_time, $notes])) {
-    echo json_encode(['code' => "1", 'msg' => "Appointment booked successfully!"]);
+if ($query->execute([$patient_name, $patient_email, $doctor_id, $dept_id, $current_date, $current_time, $notes])) {
+    echo json_encode(['code' => "1", 'msg' => $final_msg]);
 } else {
     echo json_encode(['code' => "0", 'msg' => "Booking failed. Please try again."]);
 }

@@ -6,10 +6,15 @@
                 <li><a href="index.php" class="hvr-grow">Home</a></li>
                 <li><a href="departments.php" class="hvr-grow">Departments</a></li>
                 <li><a href="doctors.php" class="hvr-grow">Doctors</a></li>
-                <li><a href="appointments.php" class="hvr-grow">Appointments</a></li>
                 <li><a href="#" onclick="toggleModal('Contact Info', 'Call us at +8801925221970 for immediate assistance.');" class="hvr-grow">Contact</a></li>
                 <?php
                 if (isset($_SESSION['user'])) {
+                    if (isset($_SESSION['role']) && $_SESSION['role'] == 'doctor') {
+                        echo '<li><a href="doctor-prescriptions.php" class="hvr-grow">Prescriptions</a></li>';
+                    } else {
+                        echo '<li><a href="appointments.php" class="hvr-grow">Appointments</a></li>';
+                        echo '<li><a href="patient-records.php" class="hvr-grow">Medical Records</a></li>';
+                    }
                     echo '<li><a href="my-appointments.php" class="hvr-grow">My Appointments</a></li>';
                     echo '<li><a href="#" class="hvr-grow">Hi, ' . $_SESSION['user'] . '</a></li>';
                     echo '<li><a href="logout.php" class="hvr-grow">Logout</a></li>';
@@ -25,10 +30,15 @@
         <li><a href="index.php">Home</a></li>
         <li><a href="departments.php">Departments</a></li>
         <li><a href="doctors.php">Doctors</a></li>
-        <li><a href="appointments.php">Appointments</a></li>
         <li><a href="#" onclick="toggleModal('Contact Info', 'Call us at +8801925221970 for immediate assistance.');">Contact</a></li>
         <?php
         if (isset($_SESSION['user'])) {
+            if (isset($_SESSION['role']) && $_SESSION['role'] == 'doctor') {
+                echo '<li><a href="doctor-prescriptions.php">Prescriptions</a></li>';
+            } else {
+                echo '<li><a href="appointments.php">Appointments</a></li>';
+                echo '<li><a href="patient-records.php">Medical Records</a></li>';
+            }
             echo '<li><a href="my-appointments.php">My Appointments</a></li>';
             echo '<li><a href="#">Hi, ' . $_SESSION['user'] . '</a></li>';
             echo '<li><a href="logout.php">Logout</a></li>';

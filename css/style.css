@@ -33,7 +33,30 @@
 }
 
 @media(min-width : 992px) {
-    .nav-wrapper > a {
-        padding-left: 35px;
+    .nav-wrapper.container {
+        width: 98% !important;
+        max-width: 1600px !important;
     }
+}
+
+nav ul li a {
+    font-size: 13px !important;
+    padding: 0 10px !important;
+    letter-spacing: 0.2px;
+}
+
+.brand-logo {
+    font-size: 1.5rem !important;
+    position: relative !important;
+    float: left !important;
+    margin-left: 0 !important;
+}
+
+.navbar-section nav {
+    height: 64px;
+    line-height: 64px;
+}
+
+.nav-wrapper .right {
+    margin-right: 0 !important;
 }

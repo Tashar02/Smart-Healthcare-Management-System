@@ -43,7 +43,7 @@ $(function(){
         $.ajax({
             url: 'backends/register.php',
             type: 'POST',
-             {
+            data: {
                 'name': name,
                 'email': email,
                 'password': password,
@@ -92,7 +92,7 @@ $(function(){
         $.ajax({
             url: 'backends/login.php',
             type: 'POST',
-             {
+            data: {
                 'email': email,
                 'password': password
             },

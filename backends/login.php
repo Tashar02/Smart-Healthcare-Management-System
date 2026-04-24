@@ -36,10 +36,21 @@ $users = $query->fetchAll(PDO::FETCH_ASSOC);
 if (count($users) > 0) {
     $user = $users[0];
     if ($user['password'] == $password) {
-        $_SESSION['user'] = explode(" ", $user['name'])[0];
+        $_SESSION['user'] = $user['name'];
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['user_email'] = $email;
         $_SESSION['role'] = $user['role'];
+        
+        if ($user['role'] === 'doctor') {
+            $sql_doc = "SELECT id FROM doctors WHERE email=?";
+            $query_doc = $pdoconn->prepare($sql_doc);
+            $query_doc->execute([$email]);
+            $doctor_data = $query_doc->fetch(PDO::FETCH_ASSOC);
+            if ($doctor_data) {
+                $_SESSION['doctor_id'] = $doctor_data['id'];
+            }
+        }
+        
         echo json_encode(['code' => "1", 'msg' => "Logged In Successfully!"]);
     } else {
         echo json_encode(['code' => "0", 'msg' => "Invalid Password!"]);

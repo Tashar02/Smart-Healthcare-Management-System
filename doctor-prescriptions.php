@@ -5,7 +5,7 @@ if (!isset($_SESSION['user']) || $_SESSION['role'] !== 'doctor') {
     exit();
 }
 require_once('backends/connection-pdo.php');
-$doctor_id = $_SESSION['user_id'];
+$doctor_id = isset($_SESSION['doctor_id']) ? $_SESSION['doctor_id'] : 0;
 $sql = "SELECT p.*, u.name as patient_name FROM prescriptions p JOIN users u ON p.patient_email = u.email WHERE p.doctor_id = ? ORDER BY p.id DESC";
 $query = $pdoconn->prepare($sql);
 $query->execute([$doctor_id]);

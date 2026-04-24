@@ -30,7 +30,7 @@ if (!preg_match($regex_email, $_POST['patient_email'])) {
     exit();
 }
 
-$doctor_id = $_SESSION['user_id'];
+$doctor_id = $_SESSION['doctor_id'];
 $patient_email = $_POST['patient_email'];
 $medications = $_POST['medications'];
 $instructions = isset($_POST['instructions']) ? $_POST['instructions'] : '';
@@ -39,6 +39,11 @@ $created_at = date("Y-m-d H:i:s");
 $sql = "INSERT INTO prescriptions(doctor_id, patient_email, medications, instructions, created_at) VALUES(?,?,?,?,?)";
 $query = $pdoconn->prepare($sql);
 if ($query->execute([$doctor_id, $patient_email, $medications, $instructions, $created_at])) {
+    // Mark the earliest pending/confirmed appointment as completed
+    $sql_update = "UPDATE appointments SET status='completed' WHERE doctor_id=? AND patient_email=? AND status != 'completed' ORDER BY appointment_date ASC, appointment_time ASC LIMIT 1";
+    $query_update = $pdoconn->prepare($sql_update);
+    $query_update->execute([$doctor_id, $patient_email]);
+
     $arr = array('code' => "1", 'msg' => "Prescription saved successfully!");
     echo json_encode($arr);
 } else {

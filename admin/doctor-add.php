@@ -24,9 +24,17 @@ $departments = $query->fetchAll(PDO::FETCH_ASSOC);
                 <div class="card-content">
                     <form action="../backends/doctor-add.php" method="POST" enctype="multipart/form-data">
                         <div class="row">
-                            <div class="input-field col s12">
+                            <div class="input-field col s12 m4">
                                 <input type="text" id="name" name="name" class="validate" required>
                                 <label for="name">Doctor Name</label>
+                            </div>
+                            <div class="input-field col s12 m4">
+                                <input type="email" id="email" name="email" class="validate" required>
+                                <label for="email">Email (for Login)</label>
+                            </div>
+                            <div class="input-field col s12 m4">
+                                <input type="password" id="password" name="password" class="validate" required>
+                                <label for="password">Password (for Login)</label>
                             </div>
                         </div>
                         <div class="row">

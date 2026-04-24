@@ -5,11 +5,25 @@ if (!isset($_SESSION['user'])) {
     exit();
 }
 require_once('backends/connection-pdo.php');
+if (!isset($_SESSION['user_email'])) {
+    header('location: logout.php');
+    exit();
+}
 $user_email = $_SESSION['user_email'];
+$role = $_SESSION['role'] ?? 'patient';
 
-$sql = "SELECT a.*, d.name as doctor_name, dept.dept_name FROM appointments a JOIN doctors d ON a.doctor_id = d.id JOIN departments dept ON a.dept_id = dept.id WHERE a.patient_email = ? ORDER BY a.id DESC";
-$query = $pdoconn->prepare($sql);
-$query->execute([$user_email]);
+if ($role === 'doctor') {
+    $doctor_id = $_SESSION['doctor_id'] ?? 0;
+    // Doctors: Earliest available first, completed at the bottom
+    $sql = "SELECT a.*, d.name as doctor_name, dept.dept_name FROM appointments a JOIN doctors d ON a.doctor_id = d.id JOIN departments dept ON a.dept_id = dept.id WHERE a.doctor_id = ? ORDER BY (a.status = 'completed') ASC, a.appointment_date ASC, a.appointment_time ASC";
+    $query = $pdoconn->prepare($sql);
+    $query->execute([$doctor_id]);
+} else {
+    // Patients: Newer bookings at the top, completed at the bottom
+    $sql = "SELECT a.*, d.name as doctor_name, dept.dept_name FROM appointments a JOIN doctors d ON a.doctor_id = d.id JOIN departments dept ON a.dept_id = dept.id WHERE a.patient_email = ? ORDER BY (a.status = 'completed') ASC, a.id DESC";
+    $query = $pdoconn->prepare($sql);
+    $query->execute([$user_email]);
+}
 $appointments = $query->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
@@ -32,8 +46,8 @@ $appointments = $query->fetchAll(PDO::FETCH_ASSOC);
     <?php require('chunks/navbar.php'); ?>
 
     <div class="section white-text center" style="background: #4a6a5c; margin-top: 20px;">
-        <h4>My Appointments</h4>
-        <p>View your booking history and status</p>
+        <h4><?php echo $role === 'doctor' ? 'Patient Appointments' : 'My Appointments'; ?></h4>
+        <p><?php echo $role === 'doctor' ? 'Manage and view appointments with your patients' : 'View your booking history and status'; ?></p>
     </div>
 
     <div class="container" style="margin-top: 30px; margin-bottom: 50px;">
@@ -44,7 +58,7 @@ $appointments = $query->fetchAll(PDO::FETCH_ASSOC);
                         <table class="highlight responsive-table">
                             <thead>
                                 <tr>
-                                    <th>Doctor</th>
+                                    <th><?php echo $role === 'doctor' ? 'Patient' : 'Doctor'; ?></th>
                                     <th>Department</th>
                                     <th>Date</th>
                                     <th>Time</th>
@@ -55,7 +69,7 @@ $appointments = $query->fetchAll(PDO::FETCH_ASSOC);
                                 <?php if (count($appointments) > 0): ?>
                                     <?php foreach ($appointments as $app): ?>
                                         <tr>
-                                            <td><?php echo htmlspecialchars($app['doctor_name']); ?></td>
+                                            <td><?php echo htmlspecialchars($role === 'doctor' ? $app['patient_name'] : $app['doctor_name']); ?></td>
                                             <td><?php echo htmlspecialchars($app['dept_name']); ?></td>
                                             <td><?php echo htmlspecialchars($app['appointment_date']); ?></td>
                                             <td><?php echo htmlspecialchars($app['appointment_time']); ?></td>
@@ -72,7 +86,9 @@ $appointments = $query->fetchAll(PDO::FETCH_ASSOC);
                                     <?php endforeach; ?>
                                 <?php else: ?>
                                     <tr>
-                                        <td colspan="5" class="center">No appointments found. Book your first visit today!</td>
+                                        <td colspan="5" class="center">
+                                            <?php echo $role === 'doctor' ? 'No patient appointments scheduled yet.' : 'No appointments found. Book your first visit today!'; ?>
+                                        </td>
                                     </tr>
                                 <?php endif; ?>
                             </tbody>
