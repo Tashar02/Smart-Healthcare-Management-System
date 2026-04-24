@@ -236,9 +236,9 @@ $today_appointments = $query_today->fetchAll(PDO::FETCH_ASSOC);
                     success: function(response){
                         var history = JSON.parse(response);
                         if(history.length > 0){
-                            var html = '<table class="striped responsive-table"><thead><tr><th>Date</th><th>Doctor</th><th>Medications</th><th>Instructions</th></tr></thead><tbody>';
+                            var html = '<table class="striped responsive-table"><thead><tr><th>Date</th><th>Doctor</th><th>Patient Notes</th><th>Medications</th><th>Instructions</th></tr></thead><tbody>';
                             history.forEach(function(item){
-                                html += '<tr><td>'+item.created_at+'</td><td>'+item.doctor_name+'</td><td>'+item.medications+'</td><td>'+(item.instructions ? item.instructions : '-')+'</td></tr>';
+                                html += '<tr><td>'+item.appointment_date+'</td><td>'+item.doctor_name+'</td><td>'+(item.notes ? item.notes : '-')+'</td><td>'+(item.medications ? item.medications : '-')+'</td><td>'+(item.instructions ? item.instructions : '-')+'</td></tr>';
                             });
                             html += '</tbody></table>';
                             $('#historyContent').html(html);

@@ -19,7 +19,12 @@ if (isset($_POST['action']) && $_POST['action'] == 'get_doctors' && isset($_POST
     echo json_encode($doctors);
 } else if (isset($_POST['action']) && $_POST['action'] == 'get_patient_history' && isset($_POST['email'])) {
     $email = $_POST['email'];
-    $sql = "SELECT p.*, d.name as doctor_name FROM prescriptions p JOIN doctors d ON p.doctor_id = d.id WHERE p.patient_email = ? ORDER BY p.id DESC";
+    $sql = "SELECT a.appointment_date, a.notes, d.name as doctor_name, p.medications, p.instructions 
+            FROM appointments a 
+            JOIN doctors d ON a.doctor_id = d.id 
+            LEFT JOIN prescriptions p ON (a.patient_email = p.patient_email AND a.doctor_id = p.doctor_id AND DATE(p.created_at) = a.appointment_date)
+            WHERE a.patient_email = ? AND a.status = 'completed' 
+            ORDER BY a.id DESC";
     $query = $pdoconn->prepare($sql);
     $query->execute([$email]);
     $history = $query->fetchAll(PDO::FETCH_ASSOC);
