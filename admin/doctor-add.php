@@ -47,9 +47,27 @@ $departments = $query->fetchAll(PDO::FETCH_ASSOC);
                             </div>
                         </div>
                         <div class="row">
-                            <div class="input-field col s12">
+                            <div class="input-field col s6">
                                 <input type="number" id="fee" name="fee" class="validate" required>
                                 <label for="fee">Consultation Fee (BDT)</label>
+                            </div>
+                            <div class="input-field col s6">
+                                <select id="available_start" name="available_start" required>
+                                    <option value="09:00" selected>09:00</option>
+                                    <option value="10:00">10:00</option>
+                                    <option value="11:00">11:00</option>
+                                    <option value="14:00">14:00</option>
+                                </select>
+                                <label>Available From</label>
+                            </div>
+                            <div class="input-field col s6">
+                                <select id="available_end" name="available_end" required>
+                                    <option value="16:00">16:00</option>
+                                    <option value="17:00" selected>17:00</option>
+                                    <option value="18:00">18:00</option>
+                                    <option value="20:00">20:00</option>
+                                </select>
+                                <label>Available Till</label>
                             </div>
                         </div>
                         <div class="row">
@@ -61,7 +79,6 @@ $departments = $query->fetchAll(PDO::FETCH_ASSOC);
                                 <div class="file-path-wrapper">
                                     <input class="file-path validate" type="text" placeholder="Select doctor photo">
                                 </div>
-                                <p style="color: #666; font-size: 0.85rem; margin-top: 5px;">Leave empty to use default placeholder.</p>
                             </div>
                         </div>
                         <div class="center">

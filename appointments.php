@@ -1,5 +1,9 @@
 <?php
 session_start();
+if (!isset($_SESSION['user'])) {
+    header('location: index.php');
+    exit();
+}
 require_once('backends/connection-pdo.php');
 $doctor_id = isset($_GET['doctor_id']) ? intval($_GET['doctor_id']) : 0;
 $selected_doctor = null;
@@ -25,6 +29,7 @@ $departments = $query_depts->fetchAll(PDO::FETCH_ASSOC);
     <link href="https://fonts.googleapis.com/css?family=Bree+Serif&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/healthcare-theme.css">
 </head>
 <body>
     <?php require('chunks/login-modal.php'); ?>
@@ -45,7 +50,8 @@ $departments = $query_depts->fetchAll(PDO::FETCH_ASSOC);
                         <?php if ($selected_doctor): ?>
                             <div class="center" style="margin-bottom: 20px; padding: 15px; background: #f4f7f6; border-radius: 10px;">
                                 <h5 style="color: #4a6a5c; margin: 0;">Booking for: <?php echo htmlspecialchars($selected_doctor['name']); ?></h5>
-                                <p style="color: #666;"><?php echo htmlspecialchars($selected_doctor['specialization']); ?> | Fee: $<?php echo htmlspecialchars($selected_doctor['fee']); ?></p>
+                                <p style="color: #666;"><?php echo htmlspecialchars($selected_doctor['specialization']); ?> | Fee: ৳<?php echo number_format($selected_doctor['fee']); ?> BDT</p>
+                                <p style="color: #666; font-size: 0.85rem;">Available: <?php echo $selected_doctor['available_start']; ?> - <?php echo $selected_doctor['available_end']; ?></p>
                             </div>
                         <?php endif; ?>
                         <form id="appointment_form">
@@ -118,7 +124,7 @@ $departments = $query_depts->fetchAll(PDO::FETCH_ASSOC);
                 $.ajax({
                     url: 'api/data.php',
                     type: 'POST',
-                    data: {action: 'get_doctors', dept_id: dept_id},
+                     {action: 'get_doctors', dept_id: dept_id},
                     success: function(response){
                         var doctors = JSON.parse(response);
                         var options = '<option value="" disabled selected>Choose Doctor</option>';
@@ -145,7 +151,7 @@ $departments = $query_depts->fetchAll(PDO::FETCH_ASSOC);
                 $.ajax({
                     url: 'backends/book-appointment.php',
                     type: 'POST',
-                    data: data,
+                     data,
                     success: function(response){
                         var res = JSON.parse(response);
                         if(res.code == "1"){

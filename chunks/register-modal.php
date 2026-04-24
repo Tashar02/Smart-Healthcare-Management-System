@@ -30,7 +30,7 @@
                         <option value="doctor">Doctor</option>
                         <option value="receptionist">Receptionist</option>
                     </select>
-                    <label>Role</label>
+                    <p style="color: #666; font-size: 0.85rem; margin-top: 5px;">Account Type</p>
                 </div>
             </div>
             <a href="javascript:void(0)" id="submit_reg" class="waves-effect waves-light btn" style="background: #6b9080 !important;">Register</a>

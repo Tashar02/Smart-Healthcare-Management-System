@@ -40,7 +40,7 @@ if (count($users) > 0) {
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['user_email'] = $email;
         $_SESSION['role'] = $user['role'];
-        echo json_encode(['code' => "1", 'msg' => "Logged In Successfully!", 'role' => $user['role']]);
+        echo json_encode(['code' => "1", 'msg' => "Logged In Successfully!"]);
     } else {
         echo json_encode(['code' => "0", 'msg' => "Invalid Password!"]);
     }

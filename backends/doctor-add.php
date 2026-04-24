@@ -16,7 +16,7 @@ try {
     exit();
 }
 
-if (!isset($_POST['name']) || !isset($_POST['dept_id']) || !isset($_POST['specialization']) || !isset($_POST['fee'])) {
+if (!isset($_POST['name']) || !isset($_POST['dept_id']) || !isset($_POST['specialization']) || !isset($_POST['fee']) || !isset($_POST['available_start']) || !isset($_POST['available_end'])) {
     $_SESSION['msg'] = 'Invalid form submission!';
     header('location: ../admin/doctor-add.php');
     exit();
@@ -26,6 +26,8 @@ $name = $_POST['name'];
 $dept_id = intval($_POST['dept_id']);
 $specialization = $_POST['specialization'];
 $fee = intval($_POST['fee']);
+$available_start = $_POST['available_start'];
+$available_end = $_POST['available_end'];
 
 $image = 'default-doctor.jpg';
 if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
@@ -39,9 +41,9 @@ if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
     }
 }
 
-$sql = "INSERT INTO doctors(dept_id, name, image, specialization, fee) VALUES(?,?,?,?,?)";
+$sql = "INSERT INTO doctors(dept_id, name, image, specialization, fee, available_start, available_end) VALUES(?,?,?,?,?,?,?)";
 $query = $pdoconn->prepare($sql);
-if ($query->execute([$dept_id, $name, $image, $specialization, $fee])) {
+if ($query->execute([$dept_id, $name, $image, $specialization, $fee, $available_start, $available_end])) {
     $_SESSION['msg'] = 'Doctor added successfully!';
 } else {
     $_SESSION['msg'] = 'Failed to add doctor!';
