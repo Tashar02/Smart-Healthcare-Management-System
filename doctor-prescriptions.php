@@ -11,6 +11,7 @@ $query = $pdoconn->prepare($sql);
 $query->execute([$doctor_id]);
 $prescriptions = $query->fetchAll(PDO::FETCH_ASSOC);
 
+date_default_timezone_set("Asia/Dhaka");
 $today = date('Y-m-d');
 $sql_today = "SELECT * FROM appointments WHERE doctor_id = ? AND appointment_date = ? AND status != 'cancelled' ORDER BY appointment_time ASC";
 $query_today = $pdoconn->prepare($sql_today);
