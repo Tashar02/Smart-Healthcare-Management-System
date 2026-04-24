@@ -1,6 +1,6 @@
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
-SET time_zone = "+00:00";
+SET time_zone = "+06:00";
 
 CREATE TABLE `admin` (
     `id` int(11) NOT NULL,
@@ -17,7 +17,7 @@ CREATE TABLE `users` (
     `name` varchar(50) DEFAULT NULL,
     `email` varchar(50) DEFAULT NULL,
     `password` varchar(100) DEFAULT NULL,
-    `role` enum('patient','doctor','receptionist') NOT NULL DEFAULT 'patient',
+    `role` enum('patient','doctor') NOT NULL DEFAULT 'patient',
     `timestamp` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
@@ -80,9 +80,9 @@ ALTER TABLE `prescriptions` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 -- Patients
 INSERT INTO `users` (`name`, `email`, `password`, `role`, `timestamp`) VALUES
-('Md. Rahim Uddin', 'rahim@example.com', '12345', 'patient', '24:04:2026 12:00:00am'),
-('Kazi Fatema Begum', 'fatema@example.com', '12345', 'patient', '24:04:2026 12:00:00am'),
-('Syed Ali Ahmed', 'ali@example.com', '12345', 'patient', '24:04:2026 12:00:00am');
+('Md. Rahim Uddin', 'rahim@example.com', '12345', 'patient', '25:04:2026 12:00:00am'),
+('Kazi Fatema Begum', 'fatema@example.com', '12345', 'patient', '25:04:2026 12:00:00am'),
+('Syed Ali Ahmed', 'ali@example.com', '12345', 'patient', '25:04:2026 12:00:00am');
 
 -- Departments
 INSERT INTO `departments` (`dept_name`, `short_desc`, `long_desc`) VALUES
@@ -94,16 +94,16 @@ INSERT INTO `departments` (`dept_name`, `short_desc`, `long_desc`) VALUES
 
 -- Doctors in users table
 INSERT INTO `users` (`name`, `email`, `password`, `role`, `timestamp`) VALUES
-('Dr. Hasan Mahmud', 'hasan@example.com', '12345', 'doctor', '24:04:2026 12:00:00am'),
-('Dr. Md. Raiyan', 'raiyan@example.com', '12345', 'doctor', '24:04:2026 12:00:00am'),
-('Dr. Tariqul Islam', 'tariqul@example.com', '12345', 'doctor', '24:04:2026 12:00:00am'),
-('Dr. Nusrat Jahan', 'nusrat@example.com', '12345', 'doctor', '24:04:2026 12:00:00am'),
-('Dr. Shafiqur Rahman', 'shafiqur@example.com', '12345', 'doctor', '24:04:2026 12:00:00am'),
-('Dr. Ayesha Siddiqa', 'ayesha@example.com', '12345', 'doctor', '24:04:2026 12:00:00am'),
-('Dr. Kamal Hossain', 'kamal@example.com', '12345', 'doctor', '24:04:2026 12:00:00am'),
-('Dr. Roksana Akter', 'roksana@example.com', '12345', 'doctor', '24:04:2026 12:00:00am'),
-('Dr. Arifur Rahman', 'arifur@example.com', '12345', 'doctor', '24:04:2026 12:00:00am'),
-('Dr. Salma Khatun', 'salma@example.com', '12345', 'doctor', '24:04:2026 12:00:00am');
+('Dr. Hasan Mahmud', 'hasan@example.com', '12345', 'doctor', '25:04:2026 12:00:00am'),
+('Dr. Md. Raiyan', 'raiyan@example.com', '12345', 'doctor', '25:04:2026 12:00:00am'),
+('Dr. Tariqul Islam', 'tariqul@example.com', '12345', 'doctor', '25:04:2026 12:00:00am'),
+('Dr. Nusrat Jahan', 'nusrat@example.com', '12345', 'doctor', '25:04:2026 12:00:00am'),
+('Dr. Shafiqur Rahman', 'shafiqur@example.com', '12345', 'doctor', '25:04:2026 12:00:00am'),
+('Dr. Ayesha Siddiqa', 'ayesha@example.com', '12345', 'doctor', '25:04:2026 12:00:00am'),
+('Dr. Kamal Hossain', 'kamal@example.com', '12345', 'doctor', '25:04:2026 12:00:00am'),
+('Dr. Roksana Akter', 'roksana@example.com', '12345', 'doctor', '25:04:2026 12:00:00am'),
+('Dr. Arifur Rahman', 'arifur@example.com', '12345', 'doctor', '25:04:2026 12:00:00am'),
+('Dr. Salma Khatun', 'salma@example.com', '12345', 'doctor', '25:04:2026 12:00:00am');
 
 -- Doctors table
 INSERT INTO `doctors` (`dept_id`, `name`, `email`, `image`, `specialization`, `fee`, `available_start`, `available_end`) VALUES
