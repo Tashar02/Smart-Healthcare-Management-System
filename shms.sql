@@ -95,7 +95,7 @@ INSERT INTO `departments` (`dept_name`, `short_desc`, `long_desc`) VALUES
 -- Doctors in users table
 INSERT INTO `users` (`name`, `email`, `password`, `role`, `timestamp`) VALUES
 ('Dr. Hasan Mahmud', 'hasan@example.com', '12345', 'doctor', '24:04:2026 12:00:00am'),
-('Dr. Farhana Islam', 'farhana@example.com', '12345', 'doctor', '24:04:2026 12:00:00am'),
+('Dr. Md. Raiyan', 'raiyan@example.com', '12345', 'doctor', '24:04:2026 12:00:00am'),
 ('Dr. Tariqul Islam', 'tariqul@example.com', '12345', 'doctor', '24:04:2026 12:00:00am'),
 ('Dr. Nusrat Jahan', 'nusrat@example.com', '12345', 'doctor', '24:04:2026 12:00:00am'),
 ('Dr. Shafiqur Rahman', 'shafiqur@example.com', '12345', 'doctor', '24:04:2026 12:00:00am'),
@@ -108,7 +108,7 @@ INSERT INTO `users` (`name`, `email`, `password`, `role`, `timestamp`) VALUES
 -- Doctors table
 INSERT INTO `doctors` (`dept_id`, `name`, `email`, `image`, `specialization`, `fee`, `available_start`, `available_end`) VALUES
 (1, 'Dr. Hasan Mahmud', 'hasan@example.com', 'doctor1.jpg', 'Cardiologist', 1500, '09:00', '14:00'),
-(1, 'Dr. Farhana Islam', 'farhana@example.com', 'doctor2.jpg', 'Heart Surgeon', 2000, '15:00', '20:00'),
+(1, 'Dr. Md. Raiyan', 'raiyan@example.com', 'doctor2.jpg', 'Heart Surgeon', 2000, '15:00', '20:00'),
 (2, 'Dr. Tariqul Islam', 'tariqul@example.com', 'default-doctor.jpg', 'Neurologist', 1200, '10:00', '16:00'),
 (2, 'Dr. Nusrat Jahan', 'nusrat@example.com', 'default-doctor.jpg', 'Neurosurgeon', 1800, '14:00', '19:00'),
 (3, 'Dr. Shafiqur Rahman', 'shafiqur@example.com', 'default-doctor.jpg', 'Orthopedic Surgeon', 1500, '08:00', '13:00'),
