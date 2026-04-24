@@ -45,15 +45,17 @@ $doctors = $query->fetchAll(PDO::FETCH_ASSOC);
                         <div class="card hoverable">
                             <div class="card-image">
                                 <?php 
-                                $img_src = htmlspecialchars($doc['image']);
-                                if (empty($img_src) || !file_exists("images/" . $img_src)) {
+                                $img_name = $doc['image'];
+                                if (empty($img_name) || !file_exists("images/" . $img_name)) {
                                     $img_src = "images/default-doctor.jpg";
+                                } else {
+                                    $img_src = "images/" . $img_name;
                                 }
                                 ?>
-                                <img src="<?php echo $img_src; ?>" alt="Doctor" style="height: 200px; object-fit: cover;">
-                                <span class="card-title" style="color: white;"><?php echo htmlspecialchars($doc['name']); ?></span>
+                                <img src="<?php echo $img_src; ?>" alt="Doctor" style="height: 250px; object-fit: cover;">
                             </div>
                             <div class="card-content">
+                                <span class="card-title" style="color: #4a6a5c; font-weight: 700; margin-bottom: 10px;"><?php echo htmlspecialchars($doc['name']); ?></span>
                                 <p style="color: #6b9080; font-weight: 500;"><?php echo htmlspecialchars($doc['specialization']); ?></p>
                                 <p style="color: #666; margin-top: 5px;">Dept: <?php echo htmlspecialchars($doc['dept_name']); ?></p>
                                 <p style="color: #333; font-weight: 600; margin-top: 10px;">Fee: ৳<?php echo number_format($doc['fee']); ?> BDT</p>
