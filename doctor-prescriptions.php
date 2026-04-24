@@ -13,7 +13,7 @@ $prescriptions = $query->fetchAll(PDO::FETCH_ASSOC);
 
 date_default_timezone_set("Asia/Dhaka");
 $today = date('Y-m-d');
-$sql_today = "SELECT * FROM appointments WHERE doctor_id = ? AND appointment_date = ? AND status != 'cancelled' ORDER BY appointment_time ASC";
+$sql_today = "SELECT * FROM appointments WHERE doctor_id = ? AND appointment_date = ? AND status NOT IN ('completed', 'cancelled') ORDER BY appointment_time ASC";
 $query_today = $pdoconn->prepare($sql_today);
 $query_today->execute([$doctor_id, $today]);
 $today_appointments = $query_today->fetchAll(PDO::FETCH_ASSOC);
@@ -81,14 +81,13 @@ $today_appointments = $query_today->fetchAll(PDO::FETCH_ASSOC);
             <div class="col s12">
                 <div class="card">
                     <div class="card-content">
-                        <h5 style="color: #4a6a5c; margin-bottom: 20px;">Today's Patients</h5>
+                        <h5 style="color: #4a6a5c; margin-bottom: 20px;">Today's Pending Patients</h5>
                         <?php if (count($today_appointments) > 0): ?>
                             <table class="highlight responsive-table">
                                 <thead>
                                     <tr>
                                         <th>Time</th>
                                         <th>Patient Name</th>
-                                        <th>Status</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -106,11 +105,6 @@ $today_appointments = $query_today->fetchAll(PDO::FETCH_ASSOC);
                                                 </a>
                                             </td>
                                             <td>
-                                                <span class="chip <?php echo $app['status'] == 'completed' ? 'green white-text' : 'orange white-text'; ?>">
-                                                    <?php echo ucfirst($app['status']); ?>
-                                                </span>
-                                            </td>
-                                            <td>
                                                 <button class="btn-small waves-effect waves-light fill-email-btn" 
                                                         data-email="<?php echo htmlspecialchars($app['patient_email']); ?>"
                                                         style="background: #6b9080 !important;">
@@ -122,7 +116,7 @@ $today_appointments = $query_today->fetchAll(PDO::FETCH_ASSOC);
                                 </tbody>
                             </table>
                         <?php else: ?>
-                            <p class="center grey-text">No appointments scheduled for today.</p>
+                            <p class="center grey-text">No pending appointments for today.</p>
                         <?php endif; ?>
                     </div>
                 </div>
