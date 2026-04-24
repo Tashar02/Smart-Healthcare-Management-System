@@ -31,6 +31,11 @@ $appointment_date = $_POST['appointment_date'];
 $appointment_time = $_POST['appointment_time'];
 $notes = isset($_POST['notes']) ? $_POST['notes'] : '';
 
+if (strtotime($appointment_date) < strtotime(date('Y-m-d'))) {
+    echo json_encode(['code' => "0", 'msg' => "You cannot book an appointment in the past!"]);
+    exit();
+}
+
 $sql_doc = "SELECT available_start, available_end FROM doctors WHERE id=?";
 $query_doc = $pdoconn->prepare($sql_doc);
 $query_doc->execute([$doctor_id]);

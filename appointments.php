@@ -106,7 +106,7 @@ $departments = $query_depts->fetchAll(PDO::FETCH_ASSOC);
                             </div>
                             <div class="row">
                                 <div class="input-field col s12 m6">
-                                    <input type="date" id="app_date" class="validate" required>
+                                    <input type="date" id="app_date" class="validate" min="<?php echo date('Y-m-d'); ?>" required>
                                     <label for="app_date" class="active">Appointment Date</label>
                                 </div>
                                 <div class="input-field col s12 m6">
