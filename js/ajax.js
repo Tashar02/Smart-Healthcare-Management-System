@@ -18,12 +18,11 @@ $(function(){
         var email = $('#email_reg').val();
         var password = $('#password_reg').val();
         var con_password = $('#con_password_reg').val();
-        var role = $('#role_reg').val();
 
         var mail_regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z]{2,4})+$/;
         var name_regex = /^[(A-Z)?(a-z)?(0-9)?\s*]+$/;
 
-        if ((name == "") || (email == "") || (password == "") || (con_password == "") || (role == "")) {
+        if ((name == "") || (email == "") || (password == "") || (con_password == "")) {
             $('#reg_error').text("Don't leave the fields blank!");
             return;
         }
@@ -46,8 +45,7 @@ $(function(){
             data: {
                 'name': name,
                 'email': email,
-                'password': password,
-                'role': role
+                'password': password
             },
             dataType: 'json',
             beforeSend: function(){
@@ -55,15 +53,15 @@ $(function(){
                 $('#reg_error').text("");
             },
             success: function(data){
-                $('#name_reg').val("");
-                $('#email_reg').val("");
-                $('#password_reg').val("");
-                $('#con_password_reg').val("");
-                var instance2 = M.Modal.getInstance($('#modal2'));
-                instance2.close();
                 if (data.code == "0") {
-                    toggleModal('Registration Failed', data.msg);
+                    $('#reg_error').text(data.msg);
                 } else {
+                    $('#name_reg').val("");
+                    $('#email_reg').val("");
+                    $('#password_reg').val("");
+                    $('#con_password_reg').val("");
+                    var instance2 = M.Modal.getInstance($('#modal2'));
+                    instance2.close();
                     toggleModal('Success', data.msg);
                 }
                 $('#submit_reg').prop("disabled", false);

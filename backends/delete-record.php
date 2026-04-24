@@ -26,12 +26,22 @@ $type = $_GET['type'];
 $id = intval($_GET['id']);
 
 if ($type == 'department') {
-    $sql = "DELETE FROM departments WHERE id=?";
-    $query = $pdoconn->prepare($sql);
-    if ($query->execute([$id])) {
-        $_SESSION['msg'] = 'Record deleted successfully!';
+    // Check if department has doctors
+    $sql_check = "SELECT COUNT(*) FROM doctors WHERE dept_id=?";
+    $query_check = $pdoconn->prepare($sql_check);
+    $query_check->execute([$id]);
+    $doc_count = $query_check->fetchColumn();
+    
+    if ($doc_count > 0) {
+        $_SESSION['msg'] = 'Cannot delete department while doctors are assigned to it!';
     } else {
-        $_SESSION['msg'] = 'Failed to delete record!';
+        $sql = "DELETE FROM departments WHERE id=?";
+        $query = $pdoconn->prepare($sql);
+        if ($query->execute([$id])) {
+            $_SESSION['msg'] = 'Record deleted successfully!';
+        } else {
+            $_SESSION['msg'] = 'Failed to delete record!';
+        }
     }
     $redirect = '../admin/department-list.php';
     

@@ -1,6 +1,6 @@
 <?php
 session_start();
-if (!isset($_SESSION['user']) || $_SESSION['role'] !== 'doctor') {
+if (!isset($_SESSION['user']) || $_SESSION['role'] !== 'doctor' || !isset($_SESSION['doctor_id'])) {
     header('location: index.php');
     exit();
 }

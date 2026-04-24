@@ -24,13 +24,8 @@
                 </div>
             </div>
             <div class="row">
-                <div class="input-field col s12">
-                    <select id="role_reg">
-                        <option value="patient" selected>Patient</option>
-                        <option value="doctor">Doctor</option>
-                        <option value="receptionist">Receptionist</option>
-                    </select>
-                    <p style="color: #666; font-size: 0.85rem; margin-top: 5px;">Account Type</p>
+                <div class="col s12 center-align">
+                    <p style="color: #666; font-size: 0.9rem;">By registering, you agree to our terms and conditions.</p>
                 </div>
             </div>
             <a href="javascript:void(0)" id="submit_reg" class="waves-effect waves-light btn" style="background: #6b9080 !important;">Register</a>

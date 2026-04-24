@@ -28,7 +28,7 @@ date_default_timezone_set("Asia/Dhaka");
 $name = $_POST['name'];
 $email = $_POST['email'];
 $password = $_POST['password'];
-$role = $_POST['role'];
+$role = 'patient';
 $timestamp = date("d:m:Y h:i:sa");
 
 $sql = "SELECT * FROM users WHERE email=?";

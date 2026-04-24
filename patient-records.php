@@ -121,14 +121,14 @@ $appointments = $query_app->fetchAll(PDO::FETCH_ASSOC);
                                                 <?php
                                                 $status_color = 'grey';
                                                 $status_text = ucfirst($app['status']);
-                                                if ($app['status'] == 'confirmed') $status_color = 'green';
+                                                if ($app['status'] == 'confirmed') $status_color = 'orange';
                                                 if ($app['status'] == 'completed') {
-                                                    $status_color = 'blue';
+                                                    $status_color = 'green';
                                                     $status_text = 'Paid / Completed';
                                                 }
                                                 if ($app['status'] == 'cancelled') $status_color = 'red';
                                                 ?>
-                                                <span class="new badge <?php echo $status_color; ?>" data-badge-caption=""><?php echo $status_text; ?></span>
+                                                <span class="new badge <?php echo $status_color; ?> darken-2" data-badge-caption=""><?php echo $status_text; ?></span>
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
