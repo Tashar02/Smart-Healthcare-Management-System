@@ -194,11 +194,11 @@ $departments = $query_depts->fetchAll(PDO::FETCH_ASSOC);
                     $('#display_fee').text(fee);
                     $('#fee_display_row').show();
                     if (start && end) {
-                    generateTimeSlots(start, end);
-                } else {
-                    $('#app_time').html('<option value="" disabled selected>Select Time Slot</option>');
-                    $('select').formSelect();
-                }
+                        generateTimeSlots(start, end);
+                    } else {
+                        $('#app_time').html('<option value="" disabled selected>Select Time Slot</option>');
+                        $('select').formSelect();
+                    }
                 } else {
                     $('#fee_display_row').hide();
                     $('#app_time').html('<option value="" disabled selected>Select Time Slot</option>');
