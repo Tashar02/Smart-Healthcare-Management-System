@@ -8,6 +8,7 @@
                 <li><a href="appointment-list.php">Appointments</a></li>
                 <li><a href="doctor-list.php">Doctors</a></li>
                 <li><a href="department-list.php">Departments</a></li>
+                <li><a href="billing-list.php">Billings</a></li>
                 <li><a href="user-list.php">Users</a></li>
                 <li><a href="logout.php" class="admin-theme-text" style="font-weight: bold;">Logout</a></li>
             </ul>

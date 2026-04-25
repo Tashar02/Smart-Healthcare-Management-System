@@ -17,11 +17,17 @@ $query_presc = $pdoconn->prepare($sql_presc);
 $query_presc->execute([$user_email]);
 $prescriptions = $query_presc->fetchAll(PDO::FETCH_ASSOC);
 
-// Fetch Appointments
-$sql_app = "SELECT a.*, d.name as doctor_name, d.fee as doctor_fee, dept.dept_name FROM appointments a JOIN doctors d ON a.doctor_id = d.id JOIN departments dept ON a.dept_id = dept.id WHERE a.patient_email = ? ORDER BY a.id DESC";
-$query_app = $pdoconn->prepare($sql_app);
-$query_app->execute([$user_email]);
-$appointments = $query_app->fetchAll(PDO::FETCH_ASSOC);
+// Fetch Billing Records
+$sql_bill = "SELECT b.*, p.medications, p.created_at as prescription_time, d.name as doctor_name, u.id as patient_id, u.name as patient_name 
+            FROM billings b 
+            JOIN prescriptions p ON b.prescription_id = p.id 
+            JOIN doctors d ON p.doctor_id = d.id 
+            JOIN users u ON b.patient_email = u.email 
+            WHERE b.patient_email = ? 
+            ORDER BY b.id DESC";
+$query_bill = $pdoconn->prepare($sql_bill);
+$query_bill->execute([$user_email]);
+$billings = $query_bill->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -102,39 +108,51 @@ $appointments = $query_app->fetchAll(PDO::FETCH_ASSOC);
                         <table class="highlight responsive-table">
                             <thead>
                                 <tr>
-                                    <th>Date</th>
+                                    <th>Patient ID</th>
+                                    <th>Patient Name</th>
                                     <th>Doctor</th>
-                                    <th>Department</th>
-                                    <th>Bill Amount</th>
+                                    <th>Prescription Date</th>
+                                    <th>Amount</th>
+                                    <th>Payment Type</th>
                                     <th>Status</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php if (count($appointments) > 0): ?>
-                                    <?php foreach ($appointments as $app): ?>
+                                <?php if (count($billings) > 0): ?>
+                                    <?php foreach ($billings as $bill): ?>
                                         <tr>
-                                            <td><?php echo htmlspecialchars($app['appointment_date']); ?></td>
-                                            <td><?php echo htmlspecialchars($app['doctor_name']); ?></td>
-                                            <td><?php echo htmlspecialchars($app['dept_name']); ?></td>
-                                            <td>৳<?php echo number_format($app['doctor_fee']); ?></td>
+                                            <td>#<?php echo htmlspecialchars($bill['patient_id']); ?></td>
+                                            <td><?php echo htmlspecialchars($bill['patient_name']); ?></td>
+                                            <td><?php echo htmlspecialchars($bill['doctor_name']); ?></td>
+                                            <td><?php echo htmlspecialchars(date('d M Y, h:i A', strtotime($bill['prescription_time']))); ?></td>
+                                            <td>৳<?php echo number_format($bill['amount']); ?></td>
+                                            <td><?php echo $bill['payment_method'] ? htmlspecialchars($bill['payment_method']) : '-'; ?></td>
                                             <td>
-                                                <?php
-                                                $status_color = 'grey';
-                                                $status_text = ucfirst($app['status']);
-                                                if ($app['status'] == 'confirmed') $status_color = 'orange';
-                                                if ($app['status'] == 'completed') {
-                                                    $status_color = 'green';
-                                                    $status_text = 'Paid / Completed';
-                                                }
-                                                if ($app['status'] == 'cancelled') $status_color = 'red';
-                                                ?>
-                                                <span class="new badge <?php echo $status_color; ?> darken-2" data-badge-caption=""><?php echo $status_text; ?></span>
+                                                <?php if ($bill['status'] == 'completed'): ?>
+                                                    <span class="new badge green darken-2" data-badge-caption="">Completed</span>
+                                                <?php else: ?>
+                                                    <span class="new badge orange darken-2" data-badge-caption="">Pending</span>
+                                                <?php endif; ?>
+                                            </td>
+                                            <td>
+                                                <?php if ($bill['status'] == 'pending'): ?>
+                                                    <button class="btn-small waves-effect waves-light pay-btn" 
+                                                            data-id="<?php echo $bill['id']; ?>"
+                                                            data-amount="<?php echo $bill['amount']; ?>"
+                                                            data-meds="<?php echo htmlspecialchars($bill['medications']); ?>"
+                                                            style="background: #6b9080 !important;">
+                                                        Pay
+                                                    </button>
+                                                <?php else: ?>
+                                                    <span class="grey-text">None</span>
+                                                <?php endif; ?>
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
                                 <?php else: ?>
                                     <tr>
-                                        <td colspan="5" class="center">No history found.</td>
+                                        <td colspan="8" class="center">No billing history found.</td>
                                     </tr>
                                 <?php endif; ?>
                             </tbody>
@@ -146,6 +164,54 @@ $appointments = $query_app->fetchAll(PDO::FETCH_ASSOC);
         </div>
     </div>
 
+    <!-- Payment Modal -->
+    <div id="paymentModal" class="modal" style="border-radius: 15px;">
+        <div class="modal-content">
+            <h4 style="color: #4a6a5c; font-family: 'Bree Serif', serif;">Complete Your Payment</h4>
+            <div class="divider"></div>
+            <div style="margin-top: 20px;">
+                <div class="row">
+                    <div class="col s12 m6">
+                        <p style="font-size: 1.1rem;"><strong>Consultation Fee:</strong></p>
+                        <p id="modalAmount" style="font-size: 2rem; color: #6b9080; font-weight: bold; margin-top: -10px;"></p>
+                    </div>
+                    <div class="col s12 m6">
+                        <p style="font-size: 1.1rem;"><strong>Prescription Summary:</strong></p>
+                        <div id="modalMeds" style="padding: 12px; background: #f4f7f6; border-radius: 8px; border-left: 4px solid #6b9080; color: #555;"></div>
+                    </div>
+                </div>
+                
+                <p style="font-size: 1.1rem; margin-top: 20px;"><strong>Choose Payment Method:</strong></p>
+                <div class="row" style="margin-top: 15px;">
+                    <div class="col s4 center">
+                        <label>
+                            <input name="payment_method" type="radio" value="Cash" checked />
+                            <span style="color: #333; font-weight: 500;">Cash</span>
+                        </label>
+                    </div>
+                    <div class="col s4 center">
+                        <label>
+                            <input name="payment_method" type="radio" value="BKash" />
+                            <span style="color: #333; font-weight: 500;">BKash</span>
+                        </label>
+                    </div>
+                    <div class="col s4 center">
+                        <label>
+                            <input name="payment_method" type="radio" value="Debit Card" />
+                            <span style="color: #333; font-weight: 500;">Debit Card</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer" style="background: #f9f9f9; padding: 0 20px 20px 0; height: 80px;">
+            <a href="#!" class="modal-close waves-effect waves-red btn-flat" style="margin-top: 15px;">Cancel</a>
+            <button id="confirmPayBtn" class="waves-effect waves-light btn-large" style="background: #6b9080 !important; border-radius: 30px; padding: 0 40px; margin-top: 10px;">
+                <i class="material-icons left">check_circle</i> Pay Now
+            </button>
+        </div>
+    </div>
+
     <?php require('chunks/footer.php'); ?>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
@@ -153,6 +219,47 @@ $appointments = $query_app->fetchAll(PDO::FETCH_ASSOC);
     <script>
         $(document).ready(function(){
             $('.tabs').tabs();
+            $('.modal').modal();
+
+            $('.pay-btn').click(function(){
+                var id = $(this).data('id');
+                var amount = $(this).data('amount');
+                var meds = $(this).data('meds');
+                
+                $('#modalAmount').text('৳' + amount);
+                $('#modalMeds').text(meds);
+                $('#confirmPayBtn').data('id', id);
+                
+                $('#paymentModal').modal('open');
+            });
+
+            $('#confirmPayBtn').click(function(){
+                var id = $(this).data('id');
+                var method = $('input[name="payment_method"]:checked').val();
+                
+                $(this).addClass('disabled').html('<i class="material-icons left">sync</i> Processing...');
+                
+                $.ajax({
+                    url: 'backends/pay-bill.php',
+                    type: 'POST',
+                    data: {bill_id: id, payment_method: method},
+                    success: function(response){
+                        var res = JSON.parse(response);
+                        if(res.code == "1"){
+                            M.toast({html: '<i class="material-icons left">check</i> ' + res.msg, classes: 'rounded green darken-2'});
+                            $('#paymentModal').modal('close');
+                            setTimeout(function(){ location.reload(); }, 1500);
+                        } else {
+                            M.toast({html: '<i class="material-icons left">error</i> ' + res.msg, classes: 'rounded red darken-2'});
+                            $('#confirmPayBtn').removeClass('disabled').html('<i class="material-icons left">check_circle</i> Pay Now');
+                        }
+                    },
+                    error: function() {
+                        M.toast({html: 'Connection error!', classes: 'rounded red darken-2'});
+                        $('#confirmPayBtn').removeClass('disabled').html('<i class="material-icons left">check_circle</i> Pay Now');
+                    }
+                });
+            });
         });
     </script>
 </body>

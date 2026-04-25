@@ -39,12 +39,26 @@ $created_at = date("Y-m-d H:i:s");
 $sql = "INSERT INTO prescriptions(doctor_id, patient_email, medications, instructions, created_at) VALUES(?,?,?,?,?)";
 $query = $pdoconn->prepare($sql);
 if ($query->execute([$doctor_id, $patient_email, $medications, $instructions, $created_at])) {
+    $prescription_id = $pdoconn->lastInsertId();
+    
+    // Fetch doctor's fee for billing
+    $sql_fee = "SELECT fee FROM doctors WHERE id = ?";
+    $query_fee = $pdoconn->prepare($sql_fee);
+    $query_fee->execute([$doctor_id]);
+    $doctor = $query_fee->fetch(PDO::FETCH_ASSOC);
+    $fee = $doctor ? $doctor['fee'] : 0;
+
+    // Create billing entry
+    $sql_bill = "INSERT INTO billings (prescription_id, patient_email, amount, status) VALUES (?, ?, ?, 'pending')";
+    $query_bill = $pdoconn->prepare($sql_bill);
+    $query_bill->execute([$prescription_id, $patient_email, $fee]);
+
     // Mark the earliest pending/confirmed appointment as completed
     $sql_update = "UPDATE appointments SET status='completed' WHERE doctor_id=? AND patient_email=? AND status != 'completed' ORDER BY appointment_date ASC, appointment_time ASC LIMIT 1";
     $query_update = $pdoconn->prepare($sql_update);
     $query_update->execute([$doctor_id, $patient_email]);
 
-    $arr = array('code' => "1", 'msg' => "Prescription saved successfully!");
+    $arr = array('code' => "1", 'msg' => "Prescription saved and billing generated successfully!");
     echo json_encode($arr);
 } else {
     $arr = array('code' => "0", 'msg' => "Failed to save prescription!");

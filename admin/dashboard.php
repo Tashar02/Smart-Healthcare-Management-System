@@ -16,6 +16,12 @@ $total_departments = $dept_query->fetchColumn();
 
 $user_query = $pdoconn->query("SELECT COUNT(*) FROM users");
 $total_users = $user_query->fetchColumn();
+
+$revenue_query = $pdoconn->query("SELECT SUM(amount) FROM billings WHERE status = 'completed'");
+$total_revenue = $revenue_query->fetchColumn() ?: 0;
+
+$pending_query = $pdoconn->query("SELECT SUM(amount) FROM billings WHERE status = 'pending'");
+$total_pending = $pending_query->fetchColumn() ?: 0;
 ?>
 
 <?php
@@ -70,6 +76,30 @@ if (isset($_SESSION['msg'])) {
                     <i class="material-icons">people</i>
                     <h3><?php echo $total_users; ?></h3>
                     <p>Users</p>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Revenue Card -->
+        <div class="col s12 m6">
+            <a href="billing-list.php">
+                <div class="metric-card center" style="background: linear-gradient(135deg, #2e7d32, #4caf50) !important; box-shadow: 0 4px 20px rgba(46, 125, 50, 0.2);">
+                    <i class="material-icons">account_balance_wallet</i>
+                    <h3>৳<?php echo number_format($total_revenue); ?></h3>
+                    <p>Total Revenue (Paid)</p>
+                </div>
+            </a>
+        </div>
+
+        <!-- Pending Collection Card -->
+        <div class="col s12 m6">
+            <a href="billing-list.php">
+                <div class="metric-card center" style="background: linear-gradient(135deg, #d84315, #ff5722) !important; box-shadow: 0 4px 20px rgba(216, 67, 21, 0.2);">
+                    <i class="material-icons">payment</i>
+                    <h3>৳<?php echo number_format($total_pending); ?></h3>
+                    <p>Pending Collections</p>
                 </div>
             </a>
         </div>

@@ -73,8 +73,21 @@ CREATE TABLE `prescriptions` (
     `created_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+CREATE TABLE `billings` (
+    `id` int(11) NOT NULL,
+    `prescription_id` int(11) NOT NULL,
+    `patient_email` varchar(100) NOT NULL,
+    `amount` int(11) NOT NULL,
+    `payment_method` varchar(50) DEFAULT NULL,
+    `status` varchar(50) DEFAULT 'pending',
+    `paid_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 ALTER TABLE `prescriptions` ADD PRIMARY KEY (`id`);
 ALTER TABLE `prescriptions` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `billings` ADD PRIMARY KEY (`id`);
+ALTER TABLE `billings` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 -- Dummy Data Insertion
 
@@ -120,14 +133,20 @@ INSERT INTO `doctors` (`dept_id`, `name`, `email`, `image`, `specialization`, `f
 
 -- Appointments
 INSERT INTO `appointments` (`patient_name`, `patient_email`, `doctor_id`, `dept_id`, `appointment_date`, `appointment_time`, `status`, `notes`) VALUES
-('Md. Rahim Uddin', 'rahim@example.com', 1, 1, '2026-04-26', '09:00', 'confirmed', 'Regular checkup'),
-('Md. Rahim Uddin', 'rahim@example.com', 3, 2, '2026-04-27', '10:00', 'pending', 'Headache issues'),
+('Md. Rahim Uddin', 'rahim@example.com', 3, 2, '2026-04-24', '10:00', 'completed', 'Headache issues'),
 ('Kazi Fatema Begum', 'fatema@example.com', 1, 1, '2026-04-25', '11:00', 'completed', 'Follow up on previous visit'),
 ('Syed Ali Ahmed', 'ali@example.com', 5, 3, '2026-04-25', '08:00', 'completed', 'Severe back pain');
 
 -- Prescriptions
 INSERT INTO `prescriptions` (`doctor_id`, `patient_email`, `medications`, `instructions`, `created_at`) VALUES
 (1, 'fatema@example.com', 'Amlodipine 5mg', '1 tablet daily in the morning', '2026-04-25 11:45:00'),
-(5, 'ali@example.com', 'Napa Extend 665mg', '1+0+1 after meal for 5 days', '2026-04-25 08:30:00');
+(5, 'ali@example.com', 'Napa Extend 665mg', '1+0+1 after meal for 5 days', '2026-04-25 08:30:00'),
+(3, 'rahim@example.com', 'Paracetamol 500mg', '1 tablet when needed', '2026-04-24 10:30:00');
+
+-- Billings
+INSERT INTO `billings` (`prescription_id`, `patient_email`, `amount`, `payment_method`, `status`, `paid_at`) VALUES
+(1, 'fatema@example.com', 1500, 'BKash', 'completed', '2026-04-25 12:00:00'),
+(2, 'ali@example.com', 1500, NULL, 'pending', NULL),
+(3, 'rahim@example.com', 1200, NULL, 'pending', NULL);
 
 COMMIT;
