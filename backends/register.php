@@ -53,10 +53,16 @@ if (count($existing) > 0) {
     exit();
 }
 
-$sql = "INSERT INTO users(name, email, password, role, timestamp) VALUES(?,?,?,?,?)";
+// Calculate new patient ID (starts at 100)
+$sql_id = "SELECT MAX(id) as max_id FROM users WHERE role = 'patient'";
+$query_id = $pdoconn->query($sql_id);
+$row_id = $query_id->fetch(PDO::FETCH_ASSOC);
+$new_id = ($row_id['max_id'] && $row_id['max_id'] >= 100) ? $row_id['max_id'] + 1 : 100;
+
+$sql = "INSERT INTO users(id, name, email, password, role, timestamp) VALUES(?,?,?,?,?,?)";
 $query = $pdoconn->prepare($sql);
-if ($query->execute([$name, $email, $password, $role, $timestamp])) {
-    echo json_encode(['code' => "1", 'msg' => "Registration successful! Please login."]);
+if ($query->execute([$new_id, $name, $email, $password, $role, $timestamp])) {
+    echo json_encode(['code' => "1", 'msg' => "Registration successful! Your ID is $new_id. Please login."]);
 } else {
     echo json_encode(['code' => "0", 'msg' => "Registration failed. Please try again."]);
 }

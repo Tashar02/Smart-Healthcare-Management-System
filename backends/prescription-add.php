@@ -17,28 +17,21 @@ try {
     exit();
 }
 
-if (!isset($_POST['patient_email']) || !isset($_POST['medications'])) {
+if (!isset($_POST['patient_id']) || !isset($_POST['medications'])) {
     $arr = array('code' => "0", 'msg' => "Invalid form submission!");
     echo json_encode($arr);
     exit();
 }
 
-$regex_email = '/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/';
-if (!preg_match($regex_email, $_POST['patient_email'])) {
-    $arr = array('code' => "0", 'msg' => "Invalid patient email!");
-    echo json_encode($arr);
-    exit();
-}
-
 $doctor_id = $_SESSION['doctor_id'];
-$patient_email = $_POST['patient_email'];
+$patient_id = intval($_POST['patient_id']);
 $medications = $_POST['medications'];
 $instructions = isset($_POST['instructions']) ? $_POST['instructions'] : '';
 $created_at = date("Y-m-d H:i:s");
 
-$sql = "INSERT INTO prescriptions(doctor_id, patient_email, medications, instructions, created_at) VALUES(?,?,?,?,?)";
+$sql = "INSERT INTO prescriptions(doctor_id, patient_id, medications, instructions, created_at) VALUES(?,?,?,?,?)";
 $query = $pdoconn->prepare($sql);
-if ($query->execute([$doctor_id, $patient_email, $medications, $instructions, $created_at])) {
+if ($query->execute([$doctor_id, $patient_id, $medications, $instructions, $created_at])) {
     $prescription_id = $pdoconn->lastInsertId();
     
     // Fetch doctor's fee for billing
@@ -49,14 +42,14 @@ if ($query->execute([$doctor_id, $patient_email, $medications, $instructions, $c
     $fee = $doctor ? $doctor['fee'] : 0;
 
     // Create billing entry
-    $sql_bill = "INSERT INTO billings (prescription_id, patient_email, amount, status) VALUES (?, ?, ?, 'pending')";
+    $sql_bill = "INSERT INTO billings (prescription_id, patient_id, amount, status) VALUES (?, ?, ?, 'pending')";
     $query_bill = $pdoconn->prepare($sql_bill);
-    $query_bill->execute([$prescription_id, $patient_email, $fee]);
+    $query_bill->execute([$prescription_id, $patient_id, $fee]);
 
     // Mark the earliest pending/confirmed appointment as completed
-    $sql_update = "UPDATE appointments SET status='completed' WHERE doctor_id=? AND patient_email=? AND status != 'completed' ORDER BY appointment_date ASC, appointment_time ASC LIMIT 1";
+    $sql_update = "UPDATE appointments SET status='completed' WHERE doctor_id=? AND patient_id=? AND status != 'completed' ORDER BY appointment_date ASC, appointment_time ASC LIMIT 1";
     $query_update = $pdoconn->prepare($sql_update);
-    $query_update->execute([$doctor_id, $patient_email]);
+    $query_update->execute([$doctor_id, $patient_id]);
 
     $arr = array('code' => "1", 'msg' => "Prescription saved and billing generated successfully!");
     echo json_encode($arr);

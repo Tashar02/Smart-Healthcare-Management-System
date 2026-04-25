@@ -46,19 +46,12 @@ if ($type == 'department') {
     $redirect = '../admin/department-list.php';
     
 } elseif ($type == 'doctor') {
-    $sql_email = "SELECT email FROM doctors WHERE id=?";
-    $query_email = $pdoconn->prepare($sql_email);
-    $query_email->execute([$id]);
-    $doctor = $query_email->fetch(PDO::FETCH_ASSOC);
-    
     $sql = "DELETE FROM doctors WHERE id=?";
     $query = $pdoconn->prepare($sql);
     if ($query->execute([$id])) {
-        if ($doctor && !empty($doctor['email'])) {
-            $sql_user = "DELETE FROM users WHERE email=? AND role='doctor'";
-            $query_user = $pdoconn->prepare($sql_user);
-            $query_user->execute([$doctor['email']]);
-        }
+        $sql_user = "DELETE FROM users WHERE id=? AND role='doctor'";
+        $query_user = $pdoconn->prepare($sql_user);
+        $query_user->execute([$id]);
         $_SESSION['msg'] = 'Record deleted successfully!';
     } else {
         $_SESSION['msg'] = 'Failed to delete record!';
@@ -66,7 +59,7 @@ if ($type == 'department') {
     $redirect = '../admin/doctor-list.php';
     
 } elseif ($type == 'user') {
-    $sql_info = "SELECT email, role FROM users WHERE id=?";
+    $sql_info = "SELECT role FROM users WHERE id=?";
     $query_info = $pdoconn->prepare($sql_info);
     $query_info->execute([$id]);
     $user = $query_info->fetch(PDO::FETCH_ASSOC);
@@ -74,10 +67,10 @@ if ($type == 'department') {
     $sql = "DELETE FROM users WHERE id=?";
     $query = $pdoconn->prepare($sql);
     if ($query->execute([$id])) {
-        if ($user && $user['role'] == 'doctor' && !empty($user['email'])) {
-            $sql_doc = "DELETE FROM doctors WHERE email=?";
+        if ($user && $user['role'] == 'doctor') {
+            $sql_doc = "DELETE FROM doctors WHERE id=?";
             $query_doc = $pdoconn->prepare($sql_doc);
-            $query_doc->execute([$user['email']]);
+            $query_doc->execute([$id]);
         }
         $_SESSION['msg'] = 'Record deleted successfully!';
     } else {

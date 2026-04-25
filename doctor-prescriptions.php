@@ -6,14 +6,14 @@ if (!isset($_SESSION['user']) || $_SESSION['role'] !== 'doctor' || !isset($_SESS
 }
 require_once('backends/connection-pdo.php');
 $doctor_id = isset($_SESSION['doctor_id']) ? $_SESSION['doctor_id'] : 0;
-$sql = "SELECT p.*, u.name as patient_name FROM prescriptions p JOIN users u ON p.patient_email = u.email WHERE p.doctor_id = ? ORDER BY p.id DESC";
+$sql = "SELECT p.*, u.name as patient_name FROM prescriptions p JOIN users u ON p.patient_id = u.id WHERE p.doctor_id = ? ORDER BY p.id DESC";
 $query = $pdoconn->prepare($sql);
 $query->execute([$doctor_id]);
 $prescriptions = $query->fetchAll(PDO::FETCH_ASSOC);
 
 date_default_timezone_set("Asia/Dhaka");
 $today = date('Y-m-d');
-$sql_today = "SELECT * FROM appointments WHERE doctor_id = ? AND appointment_date = ? AND status NOT IN ('completed', 'cancelled') ORDER BY appointment_time ASC";
+$sql_today = "SELECT a.*, u.name as patient_name FROM appointments a JOIN users u ON a.patient_id = u.id WHERE a.doctor_id = ? AND a.appointment_date = ? AND a.status NOT IN ('completed', 'cancelled') ORDER BY a.appointment_time ASC";
 $query_today = $pdoconn->prepare($sql_today);
 $query_today->execute([$doctor_id, $today]);
 $today_appointments = $query_today->fetchAll(PDO::FETCH_ASSOC);
@@ -51,8 +51,8 @@ $today_appointments = $query_today->fetchAll(PDO::FETCH_ASSOC);
                         <form id="prescription_form">
                             <div class="row">
                                 <div class="input-field col s12">
-                                    <input type="email" id="patient_email" class="validate" required>
-                                    <label for="patient_email">Patient Email</label>
+                                    <input type="number" id="patient_id" class="validate" required>
+                                    <label for="patient_id">Patient ID (3-digits)</label>
                                 </div>
                             </div>
                             <div class="row">
@@ -97,16 +97,16 @@ $today_appointments = $query_today->fetchAll(PDO::FETCH_ASSOC);
                                             <td><?php echo htmlspecialchars($app['appointment_time']); ?></td>
                                             <td>
                                                 <a href="#!" class="patient-history-trigger" 
-                                                   data-email="<?php echo htmlspecialchars($app['patient_email']); ?>" 
+                                                   data-id="<?php echo htmlspecialchars($app['patient_id']); ?>" 
                                                    data-name="<?php echo htmlspecialchars($app['patient_name']); ?>"
                                                    data-notes="<?php echo htmlspecialchars($app['notes']); ?>"
                                                    style="color: #6b9080; font-weight: 600; text-decoration: underline;">
-                                                    <?php echo htmlspecialchars($app['patient_name']); ?>
+                                                    <?php echo htmlspecialchars($app['patient_name']); ?> (ID: <?php echo $app['patient_id']; ?>)
                                                 </a>
                                             </td>
                                             <td>
-                                                <button class="btn-small waves-effect waves-light fill-email-btn" 
-                                                        data-email="<?php echo htmlspecialchars($app['patient_email']); ?>"
+                                                <button class="btn-small waves-effect waves-light fill-id-btn" 
+                                                        data-id="<?php echo htmlspecialchars($app['patient_id']); ?>"
                                                         style="background: #6b9080 !important;">
                                                     Prescribe
                                                 </button>
@@ -198,7 +198,7 @@ $today_appointments = $query_today->fetchAll(PDO::FETCH_ASSOC);
                 e.preventDefault();
                 var data = {
                     action: 'add_prescription',
-                    patient_email: $('#patient_email').val(),
+                    patient_id: $('#patient_id').val(),
                     medications: $('#medications').val(),
                     instructions: $('#instructions').val()
                 };
@@ -220,7 +220,7 @@ $today_appointments = $query_today->fetchAll(PDO::FETCH_ASSOC);
             });
 
             $('.patient-history-trigger').click(function(){
-                var email = $(this).data('email');
+                var id = $(this).data('id');
                 var name = $(this).data('name');
                 var notes = $(this).data('notes');
                 
@@ -232,7 +232,7 @@ $today_appointments = $query_today->fetchAll(PDO::FETCH_ASSOC);
                 $.ajax({
                     url: 'api/data.php',
                     type: 'POST',
-                    data: {action: 'get_patient_history', email: email},
+                    data: {action: 'get_patient_history', patient_id: id},
                     success: function(response){
                         var history = JSON.parse(response);
                         if(history.length > 0){
@@ -249,9 +249,9 @@ $today_appointments = $query_today->fetchAll(PDO::FETCH_ASSOC);
                 });
             });
 
-            $('.fill-email-btn').click(function(){
-                var email = $(this).data('email');
-                $('#patient_email').val(email);
+            $('.fill-id-btn').click(function(){
+                var id = $(this).data('id');
+                $('#patient_id').val(id);
                 M.updateTextFields();
                 $('html, body').animate({
                     scrollTop: $("#prescription_form").offset().top - 100

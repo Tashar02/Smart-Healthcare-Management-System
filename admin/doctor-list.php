@@ -5,7 +5,11 @@ if (!isset($_SESSION['admin'])) {
     exit();
 }
 require_once('../backends/connection-pdo.php');
-$sql = "SELECT d.*, dept.dept_name FROM doctors d JOIN departments dept ON d.dept_id = dept.id ORDER BY d.id ASC";
+$sql = "SELECT d.*, u.name, u.email, dept.dept_name 
+        FROM doctors d 
+        JOIN users u ON d.id = u.id 
+        JOIN departments dept ON d.dept_id = dept.id 
+        ORDER BY d.id ASC";
 $query = $pdoconn->prepare($sql);
 $query->execute();
 $doctors = $query->fetchAll(PDO::FETCH_ASSOC);

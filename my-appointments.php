@@ -5,24 +5,32 @@ if (!isset($_SESSION['user'])) {
     exit();
 }
 require_once('backends/connection-pdo.php');
-if (!isset($_SESSION['user_email'])) {
+if (!isset($_SESSION['user_id'])) {
     header('location: logout.php');
     exit();
 }
-$user_email = $_SESSION['user_email'];
+$user_id = $_SESSION['user_id'];
 $role = $_SESSION['role'] ?? 'patient';
 
 if ($role === 'doctor') {
     $doctor_id = $_SESSION['doctor_id'] ?? 0;
-    // Doctors: Earliest available first, completed at the bottom
-    $sql = "SELECT a.*, d.name as doctor_name, dept.dept_name FROM appointments a JOIN doctors d ON a.doctor_id = d.id JOIN departments dept ON a.dept_id = dept.id WHERE a.doctor_id = ? ORDER BY (a.status = 'completed') ASC, a.appointment_date ASC, a.appointment_time ASC";
+    $sql = "SELECT a.*, u_pat.name as patient_name, dept.dept_name
+            FROM appointments a
+            JOIN users u_pat ON a.patient_id = u_pat.id
+            JOIN departments dept ON a.dept_id = dept.id
+            WHERE a.doctor_id = ?
+            ORDER BY (a.status = 'completed') ASC, a.appointment_date ASC, a.appointment_time ASC";
     $query = $pdoconn->prepare($sql);
     $query->execute([$doctor_id]);
 } else {
-    // Patients: Newer bookings at the top, completed at the bottom
-    $sql = "SELECT a.*, d.name as doctor_name, dept.dept_name FROM appointments a JOIN doctors d ON a.doctor_id = d.id JOIN departments dept ON a.dept_id = dept.id WHERE a.patient_email = ? ORDER BY (a.status = 'completed') ASC, a.id DESC";
+    $sql = "SELECT a.*, u_doc.name as doctor_name, dept.dept_name
+            FROM appointments a
+            JOIN users u_doc ON a.doctor_id = u_doc.id
+            JOIN departments dept ON a.dept_id = dept.id
+            WHERE a.patient_id = ?
+            ORDER BY (a.status = 'completed') ASC, a.id DESC";
     $query = $pdoconn->prepare($sql);
-    $query->execute([$user_email]);
+    $query->execute([$user_id]);
 }
 $appointments = $query->fetchAll(PDO::FETCH_ASSOC);
 ?>

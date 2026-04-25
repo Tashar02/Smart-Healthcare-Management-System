@@ -5,28 +5,34 @@ if (!isset($_SESSION['user']) || (isset($_SESSION['role']) && $_SESSION['role'] 
     exit();
 }
 require_once('backends/connection-pdo.php');
-if (!isset($_SESSION['user_email'])) {
+if (!isset($_SESSION['user_id'])) {
     header('location: logout.php');
     exit();
 }
-$user_email = $_SESSION['user_email'];
+$user_id = $_SESSION['user_id'];
 
 // Fetch Prescriptions
-$sql_presc = "SELECT p.*, d.name as doctor_name, dept.dept_name FROM prescriptions p JOIN doctors d ON p.doctor_id = d.id JOIN departments dept ON d.dept_id = dept.id WHERE p.patient_email = ? ORDER BY p.id DESC";
+$sql_presc = "SELECT p.*, u.name as doctor_name, dept.dept_name 
+            FROM prescriptions p 
+            JOIN users u ON p.doctor_id = u.id 
+            JOIN doctors d ON p.doctor_id = d.id 
+            JOIN departments dept ON d.dept_id = dept.id 
+            WHERE p.patient_id = ? 
+            ORDER BY p.id DESC";
 $query_presc = $pdoconn->prepare($sql_presc);
-$query_presc->execute([$user_email]);
+$query_presc->execute([$user_id]);
 $prescriptions = $query_presc->fetchAll(PDO::FETCH_ASSOC);
 
 // Fetch Billing Records
-$sql_bill = "SELECT b.*, p.medications, p.created_at as prescription_time, d.name as doctor_name, u.id as patient_id, u.name as patient_name 
+$sql_bill = "SELECT b.*, p.medications, p.created_at as prescription_time, u_doc.name as doctor_name, u_pat.id as patient_id, u_pat.name as patient_name 
             FROM billings b 
             JOIN prescriptions p ON b.prescription_id = p.id 
-            JOIN doctors d ON p.doctor_id = d.id 
-            JOIN users u ON b.patient_email = u.email 
-            WHERE b.patient_email = ? 
+            JOIN users u_doc ON p.doctor_id = u_doc.id 
+            JOIN users u_pat ON b.patient_id = u_pat.id 
+            WHERE b.patient_id = ? 
             ORDER BY b.id DESC";
 $query_bill = $pdoconn->prepare($sql_bill);
-$query_bill->execute([$user_email]);
+$query_bill->execute([$user_id]);
 $billings = $query_bill->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>

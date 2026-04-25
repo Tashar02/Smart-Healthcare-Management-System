@@ -9,19 +9,19 @@ if (isset($_SESSION['role']) && $_SESSION['role'] == 'doctor') {
     exit();
 }
 require_once('backends/connection-pdo.php');
-$user_email = $_SESSION['user_email'];
+$user_id = $_SESSION['user_id'];
 
 // Fetch user's full name
-$sql_user = "SELECT name FROM users WHERE email = ?";
+$sql_user = "SELECT name FROM users WHERE id = ?";
 $query_user = $pdoconn->prepare($sql_user);
-$query_user->execute([$user_email]);
+$query_user->execute([$user_id]);
 $user_data = $query_user->fetch(PDO::FETCH_ASSOC);
 $full_name = $user_data ? $user_data['name'] : $_SESSION['user'];
 
 $doctor_id = isset($_GET['doctor_id']) ? intval($_GET['doctor_id']) : 0;
 $selected_doctor = null;
 if ($doctor_id > 0) {
-    $sql = "SELECT d.*, dept.dept_name FROM doctors d JOIN departments dept ON d.dept_id = dept.id WHERE d.id = ?";
+    $sql = "SELECT d.*, u.name, dept.dept_name FROM doctors d JOIN users u ON d.id = u.id JOIN departments dept ON d.dept_id = dept.id WHERE d.id = ?";
     $query = $pdoconn->prepare($sql);
     $query->execute([$doctor_id]);
     $selected_doctor = $query->fetch(PDO::FETCH_ASSOC);
@@ -70,12 +70,12 @@ $departments = $query_depts->fetchAll(PDO::FETCH_ASSOC);
                         <form id="appointment_form">
                             <div class="row">
                                 <div class="input-field col s12 m6">
-                                    <input type="text" id="patient_name" value="<?php echo htmlspecialchars($full_name); ?>" readonly required>
-                                    <label for="patient_name" class="active">Patient Name</label>
+                                    <input type="text" id="patient_id" value="<?php echo htmlspecialchars($user_id); ?>" readonly required>
+                                    <label for="patient_id" class="active">Patient ID</label>
                                 </div>
                                 <div class="input-field col s12 m6">
-                                    <input type="email" id="patient_email" value="<?php echo htmlspecialchars($user_email); ?>" readonly required>
-                                    <label for="patient_email" class="active">Patient Email</label>
+                                    <input type="text" id="patient_name" value="<?php echo htmlspecialchars($full_name); ?>" readonly required>
+                                    <label for="patient_name" class="active">Patient Name</label>
                                 </div>
                             </div>
                             <div class="row">
@@ -207,8 +207,7 @@ $departments = $query_depts->fetchAll(PDO::FETCH_ASSOC);
                 e.preventDefault();
                 var data = {
                     action: 'book_appointment',
-                    patient_name: $('#patient_name').val(),
-                    patient_email: $('#patient_email').val(),
+                    patient_id: $('#patient_id').val(),
                     doctor_id: $('#doctor_select').val(),
                     dept_id: $('#dept_select').val(),
                     appointment_date: $('#app_date').val(),
@@ -225,9 +224,9 @@ $departments = $query_depts->fetchAll(PDO::FETCH_ASSOC);
                             $('#app_msg').html('<span style="color: #4a6a5c;">'+res.msg+'</span>');
                             $('#appointment_form')[0].reset();
                             // Re-populate readonly fields
+                            $('#patient_id').val("<?php echo $user_id; ?>");
                             $('#patient_name').val("<?php echo addslashes($full_name); ?>");
-                            $('#patient_email').val("<?php echo addslashes($user_email); ?>");
-                            $('label[for="patient_name"], label[for="patient_email"]').addClass('active');
+                            $('label[for="patient_id"], label[for="patient_name"]').addClass('active');
                             $('select').formSelect();
                         } else {
                             $('#app_msg').html('<span style="color: red;">'+res.msg+'</span>');

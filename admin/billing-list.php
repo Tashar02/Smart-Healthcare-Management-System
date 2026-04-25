@@ -14,11 +14,11 @@ if ($status_filter == 'pending') {
 }
 
 // Fetch all billing records with custom sorting
-$sql = "SELECT b.*, p.created_at as prescription_time, d.name as doctor_name, u.name as patient_name, u.id as patient_id 
+$sql = "SELECT b.*, p.created_at as prescription_time, u_doc.name as doctor_name, u_pat.name as patient_name, u_pat.id as patient_id 
         FROM billings b 
         JOIN prescriptions p ON b.prescription_id = p.id 
-        JOIN doctors d ON p.doctor_id = d.id 
-        JOIN users u ON b.patient_email = u.email 
+        JOIN users u_doc ON p.doctor_id = u_doc.id 
+        JOIN users u_pat ON b.patient_id = u_pat.id 
         WHERE 1=1 $where_clause
         ORDER BY (b.status = 'pending') DESC, 
                  CASE WHEN b.status = 'pending' THEN p.created_at END ASC, 
@@ -67,7 +67,6 @@ $billings = $query->fetchAll(PDO::FETCH_ASSOC);
                                         <td>#<?php echo htmlspecialchars($bill['patient_id']); ?></td>
                                         <td>
                                             <div style="font-weight: 600;"><?php echo htmlspecialchars($bill['patient_name']); ?></div>
-                                            <div style="font-size: 0.8rem; color: #777;"><?php echo htmlspecialchars($bill['patient_email']); ?></div>
                                         </td>
                                         <td><?php echo htmlspecialchars($bill['doctor_name']); ?></td>
                                         <td style="font-weight: 700; color: #ef6c00;">৳<?php echo number_format($bill['amount']); ?></td>

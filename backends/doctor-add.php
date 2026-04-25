@@ -53,20 +53,31 @@ if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
     }
 }
 
-// Insert into doctors table
-$sql = "INSERT INTO doctors(dept_id, name, email, image, specialization, fee, available_start, available_end) VALUES(?,?,?,?,?,?,?,?)";
-$query = $pdoconn->prepare($sql);
-if ($query->execute([$dept_id, $name, $email, $image, $specialization, $fee, $available_start, $available_end])) {
-    // Also insert into users table for login
-    date_default_timezone_set("Asia/Dhaka");
-    $timestamp = date("d:m:Y h:i:sa");
-    $sql_user = "INSERT INTO users(name, email, password, role, timestamp) VALUES(?,?,?,'doctor',?)";
-    $query_user = $pdoconn->prepare($sql_user);
-    $query_user->execute([$name, $email, $password, $timestamp]);
-    
-    $_SESSION['msg'] = 'Doctor added successfully!';
+// Calculate new doctor ID (starts at 1000)
+$sql_id = "SELECT MAX(id) as max_id FROM users WHERE role = 'doctor'";
+$query_id = $pdoconn->query($sql_id);
+$row_id = $query_id->fetch(PDO::FETCH_ASSOC);
+$new_id = ($row_id['max_id'] && $row_id['max_id'] >= 1000) ? $row_id['max_id'] + 1 : 1000;
+
+// Also insert into users table for login
+date_default_timezone_set("Asia/Dhaka");
+$timestamp = date("d:m:Y h:i:sa");
+$sql_user = "INSERT INTO users(id, name, email, password, role, timestamp) VALUES(?,?,?,?,'doctor',?)";
+$query_user = $pdoconn->prepare($sql_user);
+
+if ($query_user->execute([$new_id, $name, $email, $password, $timestamp])) {
+    // Insert into doctors table with the same ID
+    $sql_doc = "INSERT INTO doctors(id, dept_id, image, specialization, fee, available_start, available_end) VALUES(?,?,?,?,?,?,?)";
+    $query_doc = $pdoconn->prepare($sql_doc);
+    if ($query_doc->execute([$new_id, $dept_id, $image, $specialization, $fee, $available_start, $available_end])) {
+        $_SESSION['msg'] = 'Doctor added successfully! ID: ' . $new_id;
+    } else {
+        // Rollback user if doctor insert fails (manual rollback since no transaction yet)
+        $pdoconn->prepare("DELETE FROM users WHERE id=?")->execute([$new_id]);
+        $_SESSION['msg'] = 'Failed to add doctor professional details!';
+    }
 } else {
-    $_SESSION['msg'] = 'Failed to add doctor!';
+    $_SESSION['msg'] = 'Failed to add doctor user account!';
 }
 header('location: ../admin/doctor-list.php');
 exit();

@@ -5,9 +5,10 @@ if (!isset($_SESSION['admin'])) {
     exit();
 }
 require_once('../backends/connection-pdo.php');
-$sql = "SELECT a.*, d.name as doctor_name, dept.dept_name 
+$sql = "SELECT a.*, u_pat.name as patient_name, u_doc.name as doctor_name, dept.dept_name 
         FROM appointments a 
-        JOIN doctors d ON a.doctor_id = d.id 
+        JOIN users u_pat ON a.patient_id = u_pat.id
+        JOIN users u_doc ON a.doctor_id = u_doc.id 
         JOIN departments dept ON a.dept_id = dept.id 
         ORDER BY FIELD(a.status, 'pending', 'confirmed', 'cancelled', 'completed'), a.appointment_date ASC, a.appointment_time ASC";
 $query = $pdoconn->prepare($sql);

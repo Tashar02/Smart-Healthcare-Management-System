@@ -22,13 +22,13 @@ if (!isset($_POST['bill_id']) || !isset($_POST['payment_method'])) {
 
 $bill_id = $_POST['bill_id'];
 $payment_method = $_POST['payment_method'];
-$patient_email = $_SESSION['user_email'];
+$patient_id = $_SESSION['user_id'];
 $paid_at = date("Y-m-d H:i:s");
 
 // Verify that the bill belongs to the logged-in patient and is pending
-$sql_verify = "SELECT id FROM billings WHERE id = ? AND patient_email = ? AND status = 'pending'";
+$sql_verify = "SELECT id FROM billings WHERE id = ? AND patient_id = ? AND status = 'pending'";
 $query_verify = $pdoconn->prepare($sql_verify);
-$query_verify->execute([$bill_id, $patient_email]);
+$query_verify->execute([$bill_id, $patient_id]);
 
 if ($query_verify->rowCount() > 0) {
     $sql_update = "UPDATE billings SET status = 'completed', payment_method = ?, paid_at = ? WHERE id = ?";

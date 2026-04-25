@@ -10,21 +10,13 @@ try {
     exit();
 }
 
-if (!isset($_POST['patient_name']) || !isset($_POST['patient_email']) || !isset($_POST['doctor_id']) || !isset($_POST['dept_id']) || !isset($_POST['appointment_date']) || !isset($_POST['appointment_time'])) {
+if (!isset($_POST['patient_id']) || !isset($_POST['doctor_id']) || !isset($_POST['dept_id']) || !isset($_POST['appointment_date']) || !isset($_POST['appointment_time'])) {
     echo json_encode(['code' => "0", 'msg' => "Invalid inputs!"]);
     exit();
 }
 
-$regex_email = '/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/';
-$regex_name = '/^[(A-Z)?(a-z)?(0-9)?\s*]+$/';
+$patient_id = intval($_POST['patient_id']);
 
-if (!preg_match($regex_name, $_POST['patient_name']) || !preg_match($regex_email, $_POST['patient_email'])) {
-    echo json_encode(['code' => "0", 'msg' => "Invalid name or email!"]);
-    exit();
-}
-
-$patient_name = $_POST['patient_name'];
-$patient_email = $_POST['patient_email'];
 $doctor_id = intval($_POST['doctor_id']);
 $dept_id = intval($_POST['dept_id']);
 $appointment_date = $_POST['appointment_date'];
@@ -79,9 +71,9 @@ if ($current_date != $appointment_date || $current_time != $appointment_time) {
     $final_msg = "The requested time was filled. We have scheduled you for the nearest available time: " . $current_date . " at " . $current_time;
 }
 
-$sql = "INSERT INTO appointments(patient_name, patient_email, doctor_id, dept_id, appointment_date, appointment_time, notes, status) VALUES(?,?,?,?,?,?,?, 'pending')";
+$sql = "INSERT INTO appointments(patient_id, doctor_id, dept_id, appointment_date, appointment_time, notes, status) VALUES(?,?,?,?,?,?, 'pending')";
 $query = $pdoconn->prepare($sql);
-if ($query->execute([$patient_name, $patient_email, $doctor_id, $dept_id, $current_date, $current_time, $notes])) {
+if ($query->execute([$patient_id, $doctor_id, $dept_id, $current_date, $current_time, $notes])) {
     echo json_encode(['code' => "1", 'msg' => $final_msg]);
 } else {
     echo json_encode(['code' => "0", 'msg' => "Booking failed. Please try again."]);

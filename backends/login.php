@@ -42,13 +42,7 @@ if (count($users) > 0) {
         $_SESSION['role'] = $user['role'];
         
         if ($user['role'] === 'doctor') {
-            $sql_doc = "SELECT id FROM doctors WHERE email=?";
-            $query_doc = $pdoconn->prepare($sql_doc);
-            $query_doc->execute([$email]);
-            $doctor_data = $query_doc->fetch(PDO::FETCH_ASSOC);
-            if ($doctor_data) {
-                $_SESSION['doctor_id'] = $doctor_data['id'];
-            }
+            $_SESSION['doctor_id'] = $user['id'];
         }
         
         echo json_encode(['code' => "1", 'msg' => "Logged In Successfully!"]);
