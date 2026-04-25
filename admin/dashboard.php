@@ -85,13 +85,13 @@ if (isset($_SESSION['msg'])) {
         <!-- Unified Billing Card -->
         <div class="col s12">
             <a href="billing-list.php">
-                <div class="metric-card center" style="background: linear-gradient(135deg, #1a237e, #3949ab) !important; box-shadow: 0 4px 20px rgba(26, 35, 126, 0.2); padding: 30px;">
-                    <i class="material-icons" style="font-size: 3.5rem;">payments</i>
-                    <h3 style="font-size: 2rem; margin-top: 15px;">
-                        Paid: ৳<?php echo number_format($total_revenue); ?> | 
-                        Pending: ৳<?php echo number_format($total_pending); ?>
+                <div class="metric-card center" style="background: linear-gradient(135deg, #4e342e, #6d4c41) !important; box-shadow: 0 4px 20px rgba(78, 52, 46, 0.2); padding: 30px; border: 2px solid #ef6c00;">
+                    <i class="material-icons" style="font-size: 3.5rem; color: #ff9800;">payments</i>
+                    <h3 style="font-size: 2rem; margin-top: 15px; color: #fff;">
+                        Paid: <span style="color: #81c784;">৳<?php echo number_format($total_revenue); ?></span> | 
+                        Pending: <span style="color: #ffb74d;">৳<?php echo number_format($total_pending); ?></span>
                     </h3>
-                    <p style="font-size: 1.1rem;">Financial Overview & Billings</p>
+                    <p style="font-size: 1.1rem; color: #d7ccc8; font-weight: 500;">Financial Overview & Billings</p>
                 </div>
             </a>
         </div>
