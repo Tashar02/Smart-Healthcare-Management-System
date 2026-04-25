@@ -82,24 +82,16 @@ if (isset($_SESSION['msg'])) {
     </div>
 
     <div class="row">
-        <!-- Revenue Card -->
-        <div class="col s12 m6">
+        <!-- Unified Billing Card -->
+        <div class="col s12">
             <a href="billing-list.php">
-                <div class="metric-card center" style="background: linear-gradient(135deg, #2e7d32, #4caf50) !important; box-shadow: 0 4px 20px rgba(46, 125, 50, 0.2);">
-                    <i class="material-icons">account_balance_wallet</i>
-                    <h3>৳<?php echo number_format($total_revenue); ?></h3>
-                    <p>Total Revenue (Paid)</p>
-                </div>
-            </a>
-        </div>
-
-        <!-- Pending Collection Card -->
-        <div class="col s12 m6">
-            <a href="billing-list.php">
-                <div class="metric-card center" style="background: linear-gradient(135deg, #d84315, #ff5722) !important; box-shadow: 0 4px 20px rgba(216, 67, 21, 0.2);">
-                    <i class="material-icons">payment</i>
-                    <h3>৳<?php echo number_format($total_pending); ?></h3>
-                    <p>Pending Collections</p>
+                <div class="metric-card center" style="background: linear-gradient(135deg, #1a237e, #3949ab) !important; box-shadow: 0 4px 20px rgba(26, 35, 126, 0.2); padding: 30px;">
+                    <i class="material-icons" style="font-size: 3.5rem;">payments</i>
+                    <h3 style="font-size: 2rem; margin-top: 15px;">
+                        Paid: ৳<?php echo number_format($total_revenue); ?> | 
+                        Pending: ৳<?php echo number_format($total_pending); ?>
+                    </h3>
+                    <p style="font-size: 1.1rem;">Financial Overview & Billings</p>
                 </div>
             </a>
         </div>
