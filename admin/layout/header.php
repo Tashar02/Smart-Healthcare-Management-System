@@ -78,7 +78,9 @@ if (!isset($_SESSION['admin'])) {
             color: white;
             transition: all 0.3s ease;
             box-shadow: 0 4px 20px rgba(239, 108, 0, 0.15);
-            margin: 15px; /* Added spacing */
+            margin: 15px auto; /* Auto horizontal margin for perfect centering */
+            width: calc(100% - 20px); /* Leave 10px gap on each side */
+            display: block;
         }
         .metric-card:hover {
             transform: translateY(-8px);

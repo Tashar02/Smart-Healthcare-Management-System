@@ -39,7 +39,7 @@ if (isset($_SESSION['msg'])) {
         <!-- Appointments Card -->
         <div class="col s12 m6 l3">
             <a href="appointment-list.php">
-                <div class="metric-card admin-gradient center">
+                <div class="metric-card admin-gradient center-align">
                     <i class="material-icons">event_note</i>
                     <h3><?php echo $total_appointments; ?></h3>
                     <p>Appointments</p>
@@ -50,7 +50,7 @@ if (isset($_SESSION['msg'])) {
         <!-- Doctors Card -->
         <div class="col s12 m6 l3">
             <a href="doctor-list.php">
-                <div class="metric-card admin-gradient center">
+                <div class="metric-card admin-gradient center-align">
                     <i class="material-icons">local_hospital</i>
                     <h3><?php echo $total_doctors; ?></h3>
                     <p>Doctors</p>
@@ -61,7 +61,7 @@ if (isset($_SESSION['msg'])) {
         <!-- Departments Card -->
         <div class="col s12 m6 l3">
             <a href="department-list.php">
-                <div class="metric-card admin-gradient center">
+                <div class="metric-card admin-gradient center-align">
                     <i class="material-icons">business</i>
                     <h3><?php echo $total_departments; ?></h3>
                     <p>Departments</p>
@@ -72,7 +72,7 @@ if (isset($_SESSION['msg'])) {
         <!-- Users Card -->
         <div class="col s12 m6 l3">
             <a href="user-list.php">
-                <div class="metric-card admin-gradient center">
+                <div class="metric-card admin-gradient center-align">
                     <i class="material-icons">people</i>
                     <h3><?php echo $total_users; ?></h3>
                     <p>Users</p>
@@ -85,7 +85,7 @@ if (isset($_SESSION['msg'])) {
         <!-- Unified Billing Card -->
         <div class="col s12">
             <a href="billing-list.php">
-                <div class="metric-card center" style="background: linear-gradient(135deg, #4e342e, #6d4c41) !important; box-shadow: 0 4px 20px rgba(78, 52, 46, 0.2); padding: 30px; border: 2px solid #ef6c00;">
+                <div class="metric-card center-align" style="background: linear-gradient(135deg, #4e342e, #6d4c41) !important; box-shadow: 0 4px 20px rgba(78, 52, 46, 0.2); padding: 30px; border: 2px solid #ef6c00;">
                     <i class="material-icons" style="font-size: 3.5rem; color: #ff9800;">payments</i>
                     <h3 style="font-size: 2rem; margin-top: 15px; color: #fff;">
                         Paid: <span style="color: #81c784;">৳<?php echo number_format($total_revenue); ?></span> | 
