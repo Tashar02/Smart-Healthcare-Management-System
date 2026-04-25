@@ -10,8 +10,8 @@ try {
     exit();
 }
 
-if (!isset($_POST['name']) || !isset($_POST['email']) || !isset($_POST['password']) || !isset($_POST['role'])) {
-    echo json_encode(['code' => "0", 'msg' => "Invalid inputs!"]);
+if (!isset($_POST['name']) || !isset($_POST['email']) || !isset($_POST['password'])) {
+    echo json_encode(['code' => "0", 'msg' => "Missing required fields!"]);
     exit();
 }
 
