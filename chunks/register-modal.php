@@ -23,12 +23,7 @@
                     <label for="con_password_reg">Confirm Password</label>
                 </div>
             </div>
-            <div class="row">
-                <div class="col s12 center-align">
-                    <p style="color: #666; font-size: 0.9rem;">By registering, you agree to our terms and conditions.</p>
-                </div>
-            </div>
-            <a href="javascript:void(0)" id="submit_reg" class="waves-effect waves-light btn" style="background: #6b9080 !important;">Register</a>
+            <a href="javascript:void(0)" id="submit_reg" class="waves-effect waves-light btn" style="background: #6b9080 !important; width: 100%; margin-top: 20px; height: 50px; line-height: 50px; border-radius: 25px; font-weight: 600;">Register</a>
         </form>
     </div>
 </div>

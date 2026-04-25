@@ -20,22 +20,26 @@ $(function(){
         var con_password = $('#con_password_reg').val();
 
         var mail_regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z]{2,4})+$/;
-        var name_regex = /^[(A-Z)?(a-z)?(0-9)?\s*]+$/;
+        var name_regex = /^[a-zA-Z\s.]+$/;
 
         if ((name == "") || (email == "") || (password == "") || (con_password == "")) {
-            $('#reg_error').text("Don't leave the fields blank!");
-            return;
-        }
-        else if (!mail_regex.test(email)) {
-            $('#reg_error').text('Enter a valid Email!');
+            $('#reg_error').text("Please fill in all fields!");
             return;
         }
         else if (!name_regex.test(name)) {
-            $('#reg_error').text('Enter a Proper Name!');
+            $('#reg_error').text('Invalid name format! Use letters, spaces, and dots only.');
+            return;
+        }
+        else if (!mail_regex.test(email)) {
+            $('#reg_error').text('Enter a valid email address!');
+            return;
+        }
+        else if (password.length < 5) {
+            $('#reg_error').text("Password must be at least 5 characters long!");
             return;
         }
         else if (password != con_password) {
-            $('#reg_error').text("Passwords doesn't match!");
+            $('#reg_error').text("Passwords do not match!");
             return;
         }
 

@@ -16,11 +16,23 @@ if (!isset($_POST['name']) || !isset($_POST['email']) || !isset($_POST['password
 }
 
 $regex_email = '/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/';
-$regex_name = '/^[(A-Z)?(a-z)?(0-9)?\s*]+$/';
-$regex_password = '/^[(A-Z)?(a-z)?(0-9)?!?@?#?-?_?%?]+$/';
+$regex_name = '/^[a-zA-Z\s.]+$/';
+$regex_password = '/^[a-zA-Z0-9!@#%^&*()_+-=]+$/';
 
-if (!preg_match($regex_name, $_POST['name']) || !preg_match($regex_email, $_POST['email']) || !preg_match($regex_password, $_POST['password'])) {
-    echo json_encode(['code' => "0", 'msg' => "Invalid inputs!"]);
+if (!preg_match($regex_name, $_POST['name'])) {
+    echo json_encode(['code' => "0", 'msg' => "Invalid name format!"]);
+    exit();
+}
+if (!preg_match($regex_email, $_POST['email'])) {
+    echo json_encode(['code' => "0", 'msg' => "Invalid email format!"]);
+    exit();
+}
+if (!preg_match($regex_password, $_POST['password'])) {
+    echo json_encode(['code' => "0", 'msg' => "Invalid characters in password!"]);
+    exit();
+}
+if (strlen($_POST['password']) < 5) {
+    echo json_encode(['code' => "0", 'msg' => "Password must be at least 5 characters!"]);
     exit();
 }
 
