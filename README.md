@@ -29,12 +29,12 @@ A modern, role-based healthcare management system built with PHP, PDO, MySQL, an
 - **Admin Panel:** `http://localhost/SHMS/admin/login-admin.php`
   - Email: `admin@shms.com`
   - Password: `12345`
-- **User Accounts:** Register via the frontend "Register" modal. Select role (Patient/Doctor/Receptionist) during signup.
+- **User Accounts:** Register via the frontend "Register" modal. Patient is the default role set. Doctors need to be registered and manually added via admin since doctors need to ensure proper valid document submission to the rightful authority before getting access to SHMS.
 
 ## Database Schema Overview
-- `users`: Stores patient, doctor, and receptionist accounts with role enumeration
+- `users`: Stores patient and doctor accounts with role enumeration
 - `admin`: System administrator credentials
-- `departments`: Medical departments/specialties
+- `departments`: Medical departments that are available
 - `doctors`: Doctor profiles linked to departments
 - `appointments`: Booking records with status tracking (pending/confirmed/completed/cancelled)
 - `prescriptions`: Digital prescriptions issued by doctors to patients
