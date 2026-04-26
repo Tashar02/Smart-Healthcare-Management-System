@@ -13,8 +13,8 @@ A modern, role-based healthcare management system built with PHP, PDO, MySQL, an
 ## Tech Stack
 - **Backend:** PHP 8+, PDO (MySQL)
 - **Frontend:** HTML5, CSS3, JavaScript (jQuery), Materialize CSS
-- **Database:** MySQL / MariaDB
-- **Server:** Apache (XAMPP/WAMP/LAMP)
+- **Database:** MySQL / MariaDB (Storage Engine: InnoDB)
+- **Server:** Apache (XAMPP)
 
 ## Installation & Setup
 1. Clone or download this repository into your `htdocs` folder (e.g., `C:\xampp\htdocs\SHMS`)
